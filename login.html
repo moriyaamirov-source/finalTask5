@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Israeli Trips - התחברות</title>
+    <link rel="stylesheet" href="StyleSheet1.css">
+    <link rel="stylesheet" href="login.css">
+    <script src="Validation.js" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Israeli Trips</div>
+        <div class="nav-links">
+            <a href="homePage.html">בית</a>
+            <a href="trips.html">טיולים</a>
+            <a href="tips.html">טיפים</a>
+            <a href="login.html">התחברות</a>
+            <a href="register.html">הרשמה</a>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <div class="form-card">
+            <h2>התחברות לחשבון</h2>
+            <form id="loginForm" novalidate>
+                <div class="form-group">
+                    <label for="email">אימייל:</label>
+                    <input type="email" id="email" name="email" required placeholder="example@email.com">
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">סיסמה:</label>
+                    <input type="password" id="password" name="password" required placeholder="הכנס סיסמה">
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <button type="submit" class="submit-btn">התחבר</button>
+            </form>
+            <p class="form-footer">עוד לא נרשמת? <a href="register.html">להרשמה לחץ כאן</a></p>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const Post = require('./models/Post'); // ייבוא של מודל הפוסטים
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware לקריאת JSON וטפסים
 app.use(express.json());
@@ -21,6 +22,34 @@ mongoose.connect(MONGO_URI)
 // נתיב בדיקה התחלתי
 app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is up and running!' });
+});
+
+// ==========================================
+// נתיבי ה-API לפוסטים (CRUD)
+// ==========================================
+
+// 1. יצירת פוסט חדש (POST)
+app.post('/posts', async (req, res) => {
+    try {
+        const newPost = new Post({
+            title: req.body.title,
+            content: req.body.content
+        });
+        const savedPost = await newPost.save();
+        res.status(201).json(savedPost);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// 2. קבלת כל הפוסטים (GET)
+app.get('/posts', async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.json(posts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
 // הפעלת השרת

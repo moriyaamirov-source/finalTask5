@@ -52,6 +52,39 @@ app.get('/posts', async (req, res) => {
     }
 });
 
+// 3. עדכון פוסט קיים (UPDATE) - לפי סעיף 22
+app.put('/posts/:id', async (req, res) => {
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
+            { 
+                title: req.body.title, 
+                content: req.body.content 
+            },
+            { new: true }
+        );
+        if (!updatedPost) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json(updatedPost);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// 4. מחיקת פוסט (DELETE) - לפי סעיף 22
+app.delete('/posts/:id', async (req, res) => {
+    try {
+        const deletedPost = await Post.findByIdAndDelete(req.params.id);
+        if (!deletedPost) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json({ message: 'Post deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // הפעלת השרת
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

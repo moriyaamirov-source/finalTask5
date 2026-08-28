@@ -3,13 +3,14 @@ const Post = require('../models/Post');
 // 1. יצירת פוסט חדש (כולל שיוך ליוצר)
 exports.createPost = async (req, res) => {
     try {
-        const { title, content, postType, mediaUrl, authorId } = req.body;
+        const { title, content, postType, mediaUrl, authorId, location } = req.body;
         const newPost = new Post({
             title,
             content,
             postType: postType || 'text',
             mediaUrl,
-            author: authorId // שיוך למשתמש שיצר את הפוסט
+            author: authorId, // שיוך למשתמש שיצר את הפוסט
+            location
         });
         const savedPost = await newPost.save();
         res.status(201).json(savedPost);
@@ -104,7 +105,7 @@ exports.getPostsStatsByDate = async (req, res) => {
 // 5. עדכון פוסט קיים עם אכיפת הרשאות (דרישה 25)
 exports.updatePost = async (req, res) => {
     try {
-        const { title, content, postType, mediaUrl, userId } = req.body;
+        const { title, content, postType, mediaUrl, userId, location } = req.body;
         
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -120,6 +121,7 @@ exports.updatePost = async (req, res) => {
         post.content = content || post.content;
         post.postType = postType || post.postType;
         post.mediaUrl = mediaUrl || post.mediaUrl;
+        if (location) post.location = location;
 
         const updatedPost = await post.save();
         res.json(updatedPost);

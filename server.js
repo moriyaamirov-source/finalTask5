@@ -39,8 +39,13 @@ app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
 app.use('/api', apiRoutes);
 
+// הפניית הנתיב הראשי לדף הטיולים
+app.get('/', (req, res) => {
+    res.redirect('/trips.html');
+});
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running successfully on port ${PORT}`);
+    console.log(`Server is running at http://localhost:${PORT}/trips.html`);
 });

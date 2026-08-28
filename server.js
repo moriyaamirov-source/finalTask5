@@ -32,10 +32,12 @@ mongoose.connect(MONGO_URI)
 const authRoutes = require('./routes/authRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 
 app.use('/auth', authRoutes);
 app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
+app.use('/api', apiRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -51,8 +51,8 @@ function loadTableWeather() {
                 if (data.success) {
                     var cells = document.querySelectorAll('.weather-cell[data-region="' + region + '"]');
                     cells.forEach(function(cell) {
-                        // השינוי נמצא בשורה הזו - הפיכת הסדר של קמ"ש ו-windspeed
-                        cell.innerHTML = '☀️ ' + data.temperature + '°C | קמ"ש ' + data.windspeed;
+                        // שימוש ב-bdi להפרדת כיווניות כך שהמספר יופיע מימין לקמ"ש
+                        cell.innerHTML = '☀️ ' + data.temperature + '°C | <bdi dir="rtl">' + data.windspeed + ' קמ"ש</bdi>';
                     });
                 }
             })

@@ -149,3 +149,31 @@ exports.deletePost = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+const axios = require('axios');
+
+exports.shareToFacebook = async (req, res) => {
+    try {
+        const { message } = req.body;
+        
+        // משיכת הטוקן בצורה מאובטחת. במערכת אמיתית זה יגיע ממודל המשתמש, 
+        // אבל לצורך ההדגמה נשתמש במשתנה הסביבה.
+        const userToken = process.env.FACEBOOK_ACCESS_TOKEN; 
+        
+        if (!userToken) {
+            return res.status(400).json({ success: false, message: 'חסר טוקן התחברות' });
+        }
+
+        const facebookUrl = `https://graph.facebook.com/me/feed`;
+        
+        // שליחת הפוסט לפייסבוק
+        await axios.post(facebookUrl, {
+            message: message,
+            access_token: userToken
+        });
+
+        res.status(200).json({ success: true, message: 'הפוסט פורסם בהצלחה בפייסבוק!' });
+    } catch (error) {
+        console.error('שגיאה בפרסום לפייסבוק:', error);
+        res.status(500).json({ success: false, message: 'שגיאה מול ה-API של פייסבוק' });
+    }
+};

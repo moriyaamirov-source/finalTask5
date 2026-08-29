@@ -62,3 +62,27 @@
 .delete-btn:hover {
     background-color: #cc0000;
 }
+/* 1. הוספת פונט מותאם אישית */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('/fonts/myfont.woff2') format('woff2');
+}
+
+/* 2. פיצול טקסט לעמודות (מעולה לעמוד אודות או חוקים) */
+.text-columns {
+  column-count: 3;
+  column-gap: 20px;
+}
+
+/* 3. כפתור עם צל, פינות עגולות ואנימציה (מעבר חלק) */
+.my-button {
+  border-radius: 15px; /* פינות מעוגלות */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* צל לטקסט */
+  background-color: blue;
+  transition: background-color 0.3s ease; /* אנימציית מעבר */
+}
+
+/* כשהעכבר מרחף על הכפתור */
+.my-button:hover {
+  background-color: darkblue;
+}

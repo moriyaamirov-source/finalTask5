@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const mongoose = require('mongoose');
 
 // 1. יצירת פוסט חדש (כולל שיוך ליוצר)
 exports.createPost = async (req, res) => {
@@ -105,15 +106,22 @@ exports.getPostsStatsByDate = async (req, res) => {
 // 5. עדכון פוסט קיים עם אכיפת הרשאות (דרישה 25)
 exports.updatePost = async (req, res) => {
     try {
+        const postId = req.params.id;
+
+        // בדיקת תקינות ID לפני פנייה ל-DB למניעת שגיאת 500
+        if (!mongoose.Types.ObjectId.isValid(postId)) {
+            return res.status(400).json({ message: 'Invalid Post ID format' });
+        }
+
         const { title, content, postType, mediaUrl, userId, location } = req.body;
         
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(postId);
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
         // אכיפת הרשאות: בדיקה האם המשתמש המבקש הוא אכן יוצר הפוסט
-        if (post.author && post.author.toString() !== userId) {
+        if (userId && post.author && post.author.toString() !== userId.toString()) {
             return res.status(403).json({ message: 'Permission denied: You can only edit your own posts' });
         }
 
@@ -130,24 +138,31 @@ exports.updatePost = async (req, res) => {
     }
 };
 
-// 6. מחיקת פוסט עם אכיפת הרשאות (דרישה 25)[cite: 1]
+// 6. מחיקת פוסט עם אכיפת הרשאות
 exports.deletePost = async (req, res) => {
     try {
-        const { userId } = req.body; // או מתוך ה-Session/Token
-        const post = await Post.findById(req.params.id);
+        const postId = req.params.id;
+
+        // בדיקת תקינות ID לפני פנייה ל-DB למניעת שגיאת 500
+        if (!mongoose.Types.ObjectId.isValid(postId)) {
+            return res.status(400).json({ message: 'Invalid Post ID format' });
+        }
+
+        const userId = req.body?.userId || req.session?.user?._id || req.query?.userId;
+        const post = await Post.findById(postId);
         
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        // אכיפת הרשאות: רק יוצר הפוסט יכול למחוק אותו
-        if (post.author && post.author.toString() !== userId) {
+        if (userId && post.author && post.author.toString() !== userId.toString()) {
             return res.status(403).json({ message: 'Permission denied: You can only delete your own posts' });
         }
 
-        await Post.findByIdAndDelete(req.params.id);
+        await Post.findByIdAndDelete(postId);
         res.json({ message: 'Post deleted successfully' });
     } catch (err) {
+        console.error('Error in deletePost:', err);
         res.status(500).json({ message: err.message });
     }
 };

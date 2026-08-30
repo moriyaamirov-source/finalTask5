@@ -24,6 +24,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "mongodb": "^7.6.0",
-    "mongoose": "^9.9.4"
+    "mongoose": "^9.9.4",
+    "twitter-api-v2": "^1.29.1"
   }
 }

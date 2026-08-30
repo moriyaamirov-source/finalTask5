@@ -1,119 +1,160 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Israeli Trips - דף הבית</title>
-    <link rel="stylesheet" href="StyleSheet1.css">
+
+    <link rel="stylesheet" href="/css/StyleSheet1.css">
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="logo">Israeli Trips</div>
-        <div class="nav-links">
-            <a href="homePage.html">בית</a>
-            <a href="trips.html">טיולים</a>
-            <a href="tips.html">טיפים</a>
-            <a href="login.html">התחברות</a>
-            <a href="register.html">הרשמה</a>
-        </div>
-    </nav>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">Israeli Trips</div>
+
+            <div class="nav-links">
+                <a href="homePage.html">בית</a>
+                <a href="trips.html">טיולים</a>
+                <a href="tips.html">טיפים</a>
+                <a href="login.html">התחברות</a>
+                <a href="register.html">הרשמה</a>
+            </div>
+        </nav>
+    </header>
 
     <main class="main-container">
-        <!-- אזור הראשי -->
-         <main class="main-container">
-    <h1 id="welcomeMessage"></h1>
-    <!-- שאר הקוד של דף הבית -->
-</main>
 
-<!-- חיבור סקריפט ייעודי לדף הבית לפני סגירת ה-body -->
-<script src="homePage.js"></script>
-        
+        <h1 id="welcomeMessage"></h1>
+
+        <!-- אזור ראשי -->
         <section class="hero-section">
             <h1>המסע שלכם בארץ ישראל מתחיל כאן</h1>
-            <p>גלו את המסלולים הכי יפים, מהצפון הירוק ועד הדרום המדברי.</p>
+
+            <p>
+                גלו את המסלולים הכי יפים,
+                מהצפון הירוק ועד הדרום המדברי.
+            </p>
+
             <div class="cta-buttons">
-                <a href="trips.html" class="btn btn-primary">לכל המסלולים</a>
+                <a href="trips.html" class="btn-primary">
+                    לכל המסלולים
+                </a>
             </div>
         </section>
 
-        <!-- כרטיסי תכונות (Features) -->
+        <!-- כרטיסי מידע -->
         <section class="features-grid">
+
             <div class="feature-card">
                 <div class="icon">📍</div>
+
                 <h3>מסלולים מעודכנים</h3>
-                <p>כל המידע על מצב הנחלים, פריחות ודרגות קושי בזמן אמת.</p>
+
+                <p>
+                    כל המידע על מסלולים,
+                    מקומות מומלצים ודרגות קושי.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="icon">⛺</div>
+
                 <h3>תכנון טיול</h3>
-                <p>בנו את הטיול הבא שלכם עם מערכת ההרשמה והטיפים שלנו.</p>
+
+                <p>
+                    מצאו מידע וטיפים שיעזרו לכם
+                    לתכנן את הטיול הבא.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="icon">📸</div>
+
                 <h3>קהילת מטיילים</h3>
-                <p>שתפו חוויות ותמונות מהמקומות הכי יפים בארץ.</p>
+
+                <p>
+                    שתפו חוויות ופוסטים
+                    עם קהילת המטיילים שלנו.
+                </p>
             </div>
+
         </section>
 
-        <!-- קופסת מידע על האתר -->
+        <!-- מידע על האתר -->
         <section class="info-card">
-            <h3>על האתר שלנו</h3>
-            <p>
-                Israeli Trips הוקם כדי להנגיש את הטבע הישראלי לכולם. בין אם אתם מחפשים טיול משפחתי רגוע עם עגלות, או טרק אתגרי של יום שלם - אנחנו כאן כדי לתת לכם את כל הכלים הדרושים.
+            <h2>על האתר שלנו</h2>
+
+            <p class="about-text">
+                Israeli Trips הוקם כדי להנגיש את הטבע הישראלי לכולם.
+                באתר תוכלו למצוא מסלולים, טיפים ומידע שיעזור לכם לתכנן
+                את הטיול הבא שלכם. המערכת מאפשרת למשתמשים לשתף חוויות,
+                לפרסם פוסטים ולגלות מקומות חדשים ברחבי הארץ.
             </p>
         </section>
+
+        <!-- Canvas -->
+        <section class="info-card">
+            <h2>Canvas</h2>
+
+            <p>
+                ציור דינמי שנוצר באמצעות HTML5 Canvas ו-JavaScript.
+            </p>
+
+            <canvas id="myCanvas" width="300" height="150">
+                הדפדפן שלך אינו תומך ב-Canvas.
+            </canvas>
+        </section>
+
+        <!-- Video -->
+        <section class="info-card">
+            <h2>סרטון טיולים</h2>
+
+            <p>
+                צפו בסרטון וקבלו השראה לטיול הבא שלכם.
+            </p>
+
+            <video controls width="100%">
+                <source src="/media/travelvideo.mp4" type="video/mp4">
+                הדפדפן שלך אינו תומך בהצגת וידאו.
+            </video>
+        </section>
+
+        <!-- X API -->
+        <aside class="info-card">
+            <h2>שיתוף ל-X</h2>
+
+            <p>
+                כתבו תוכן ופרסמו אותו ישירות לחשבון X באמצעות ה-API.
+            </p>
+
+            <textarea
+                id="xPostText"
+                rows="4"
+                placeholder="כתבו משהו לשיתוף..."></textarea>
+
+            <br>
+
+            <button id="xShareBtn" class="btn-primary">
+                פרסם ב-X
+            </button>
+
+            <p id="xMessage"></p>
+        </aside>
+
     </main>
 
     <footer class="footer">
-        <p>&copy; Israeli Trips - כל הזכויות שמורות</p>
+        <p>
+            &copy; Israeli Trips - כל הזכויות שמורות
+        </p>
     </footer>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>הרשת החברתית שלנו</title>
-    <!-- קישור לעיצוב שיצרת הרגע -->
-    <link rel="stylesheet" href="/css/StyleSheet1.css"> 
-</head>
-<body>
-    <header>
-        <h1>ברוכים הבאים לפיד</h1>
-    </header>
-    
-    <nav>
-        <a href="/homePage.html">דף הבית</a>
-        <a href="/tips.html">טיפים</a>
-        <a href="/trips.html">טיולים</a>
-    </nav>
-    
-    <section>
-        <h2>פוסטים אחרונים</h2>
-        
-        <div class="post">
-            <p>הנה פוסט לדוגמה עם וידאו:</p>
-            <video controls width="100%">
-                <source src="sample.mp4" type="video/mp4">
-            </video>
-        </div>
-        
-        <div class="post">
-            <p>קנבס לציור:</p>
-            <canvas id="myCanvas" width="300" height="150" style="border:1px solid #ccc; border-radius: 15px;"></canvas>
-        </div>
-    </section>
-    
-    <aside>
-        <h3>אזור אישי</h3>
-        <!-- הכפתור שעיצבת, ישמש בהמשך לפייסבוק -->
-        <button class="my-button" id="fbShareBtn">שתף בפייסבוק</button> 
-    </aside>
-    
-    <footer>
-        <p>כל הזכויות שמורות ©</p>
-    </footer>
-    
+
     <script src="/js/homePage.js"></script>
+
 </body>
+
 </html>

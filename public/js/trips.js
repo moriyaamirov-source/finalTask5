@@ -38,11 +38,42 @@ function sortTableByTime() {
     }
 }
 
-// חיבור האירועים
+// טעינת מזג אוויר בלייב לכל האזורים בטבלה
+function loadTableWeather() {
+    var regions = ['north', 'center', 'south'];
+
+    regions.forEach(function(region) {
+        fetch('/api/weather?region=' + region)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success) {
+                    var cells = document.querySelectorAll('.weather-cell[data-region="' + region + '"]');
+                    cells.forEach(function(cell) {
+                        // שימוש ב-bdi להפרדת כיווניות כך שהמספר יופיע מימין לקמ"ש
+                        cell.innerHTML = '☀️ ' + data.temperature + '°C | <bdi dir="rtl">' + data.windspeed + ' קמ"ש</bdi>';
+                    });
+                }
+            })
+            .catch(function(err) {
+                console.error('שגיאה בטעינת מזג אוויר עבור ' + region, err);
+                var cells = document.querySelectorAll('.weather-cell[data-region="' + region + '"]');
+                cells.forEach(function(cell) {
+                    cell.innerText = 'שגיאה בטעינה';
+                });
+            });
+    });
+}
+
+// הרצת אירועים בטעינת הדף
 document.addEventListener("DOMContentLoaded", function() {
     var searchInput = document.getElementById("tableNameSearch");
     var sortHeader = document.getElementById("sortTimeHeader");
 
     if (searchInput) searchInput.addEventListener("keyup", searchTable);
     if (sortHeader) sortHeader.addEventListener("click", sortTableByTime);
+
+    // טעינת מזג האוויר בטבלה
+    loadTableWeather();
 });

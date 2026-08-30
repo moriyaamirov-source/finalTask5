@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -7,30 +6,60 @@ require('dotenv').config();
 
 const app = express();
 
+
+// ==============================
 // Middleware
+// ==============================
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Session Configuration
+
+// ==============================
+// Static Files
+// ==============================
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'views')));
+
+
+// ==============================
+// Session
+// ==============================
+
 app.use(session({
-    secret: 'mySuperSecretKey123',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        sameSite: 'lax'
+    }
 }));
 
-// Connect to MongoDB using the environment variable from .env
+
+// ==============================
+// MongoDB Connection
+// ==============================
+
 const MONGO_URI =
     process.env.MONGO_URI ||
     'mongodb://localhost:27017/socialNetworkDB';
 
 mongoose.connect(MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => {
+        console.log('Successfully connected to MongoDB');
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+    });
 
 
+// ==============================
 // Routes
+// ==============================
+
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
@@ -42,9 +71,23 @@ app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
 
 
-// Server
+// ==============================
+// Main Page
+// ==============================
+
+app.get('/', (req, res) => {
+    res.redirect('/trips.html');
+});
+
+
+// ==============================
+// Start Server
+// ==============================
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(
+        `Server is running at http://localhost:${PORT}/trips.html`
+    );
 });

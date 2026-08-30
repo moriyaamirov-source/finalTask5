@@ -2,22 +2,19 @@ const Post = require('../models/Post');
 const mongoose = require('mongoose');
 
 
-// CREATE - יצירת פוסט חדש
+// CREATE
 exports.createPost = async (req, res) => {
     try {
-        const { title, content, postType, mediaUrl, authorId } = req.body;
+        const {
+            title,
+            content,
+            postType,
+            mediaUrl
+        } = req.body;
 
-        // בדיקת שדות חובה
         if (!title || !content) {
             return res.status(400).json({
                 message: 'Title and content are required'
-            });
-        }
-
-        // אם התקבל authorId - נבדוק שהוא ID תקין
-        if (authorId && !mongoose.Types.ObjectId.isValid(authorId)) {
-            return res.status(400).json({
-                message: 'Invalid author ID'
             });
         }
 
@@ -26,7 +23,9 @@ exports.createPost = async (req, res) => {
             content,
             postType: postType || 'text',
             mediaUrl,
-            author: authorId
+
+            // היוצר מגיע מה-session בלבד
+            author: req.session.userId
         });
 
         const savedPost = await newPost.save();
@@ -43,7 +42,7 @@ exports.createPost = async (req, res) => {
 };
 
 
-// READ - שליפת כל הפוסטים
+// READ ALL
 exports.getPosts = async (req, res) => {
     try {
         const posts = await Post.find()
@@ -53,16 +52,14 @@ exports.getPosts = async (req, res) => {
         res.status(200).json(posts);
 
     } catch (err) {
-        console.error('Error fetching posts:', err);
-
         res.status(500).json({
-            message: 'Failed to fetch posts'
+            message: err.message
         });
     }
 };
 
 
-// READ - שליפת פוסט לפי ID
+// READ BY ID
 exports.getPostById = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -83,24 +80,27 @@ exports.getPostById = async (req, res) => {
         res.status(200).json(post);
 
     } catch (err) {
-        console.error('Error fetching post:', err);
-
         res.status(500).json({
-            message: 'Failed to fetch post'
+            message: err.message
         });
     }
 };
 
 
-// SEARCH - חיפוש מתקדם
-// החלק הזה יוכל להישאר אצל יפתח / להשתנות על ידו בהמשך
+// ========================================
+// SEARCH 1 - לפחות 3 פרמטרים
+// keyword + postType + startDate
+// ========================================
 exports.advancedSearchPosts = async (req, res) => {
     try {
-        const { keyword, postType, startDate } = req.query;
+        const {
+            keyword,
+            postType,
+            startDate
+        } = req.query;
 
         const query = {};
 
-        // פרמטר 1 - מילת מפתח
         if (keyword) {
             query.$or = [
                 {
@@ -118,26 +118,31 @@ exports.advancedSearchPosts = async (req, res) => {
             ];
         }
 
-        // פרמטר 2 - סוג פוסט
         if (postType) {
             query.postType = postType;
         }
 
-        // פרמטר 3 - תאריך
         if (startDate) {
+            const parsedDate = new Date(startDate);
+
+            if (Number.isNaN(parsedDate.getTime())) {
+                return res.status(400).json({
+                    message: 'Invalid startDate'
+                });
+            }
+
             query.createdAt = {
-                $gte: new Date(startDate)
+                $gte: parsedDate
             };
         }
 
         const posts = await Post.find(query)
-            .populate('author', 'username');
+            .populate('author', 'username')
+            .sort({ createdAt: -1 });
 
         res.status(200).json(posts);
 
     } catch (err) {
-        console.error('Error searching posts:', err);
-
         res.status(500).json({
             message: err.message
         });
@@ -145,19 +150,93 @@ exports.advancedSearchPosts = async (req, res) => {
 };
 
 
-// GROUP BY 1 - סטטיסטיקה לפי סוג פוסט
+// ========================================
+// SEARCH 2 - לפחות 3 פרמטרים
+// title + endDate + hasMedia
+// ========================================
+exports.filterPosts = async (req, res) => {
+    try {
+        const {
+            title,
+            endDate,
+            hasMedia
+        } = req.query;
+
+        const query = {};
+
+        if (title) {
+            query.title = {
+                $regex: title,
+                $options: 'i'
+            };
+        }
+
+        if (endDate) {
+            const parsedDate = new Date(endDate);
+
+            if (Number.isNaN(parsedDate.getTime())) {
+                return res.status(400).json({
+                    message: 'Invalid endDate'
+                });
+            }
+
+            query.createdAt = {
+                $lte: parsedDate
+            };
+        }
+
+        if (hasMedia === 'true') {
+            query.mediaUrl = {
+                $exists: true,
+                $nin: [null, '']
+            };
+        }
+
+        if (hasMedia === 'false') {
+            query.$or = [
+                { mediaUrl: { $exists: false } },
+                { mediaUrl: null },
+                { mediaUrl: '' }
+            ];
+        }
+
+        const posts = await Post.find(query)
+            .populate('author', 'username')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(posts);
+
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
+
+
+// ========================================
+// GROUP BY 1
+// קיבוץ לפי סוג פוסט
+// ========================================
 exports.getPostsStatsByType = async (req, res) => {
     try {
         const stats = await Post.aggregate([
             {
                 $group: {
                     _id: '$postType',
-                    count: { $sum: 1 },
+                    count: {
+                        $sum: 1
+                    },
                     averageTitleLength: {
                         $avg: {
                             $strLenCP: '$title'
                         }
                     }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
                 }
             }
         ]);
@@ -165,8 +244,6 @@ exports.getPostsStatsByType = async (req, res) => {
         res.status(200).json(stats);
 
     } catch (err) {
-        console.error('Error fetching post type stats:', err);
-
         res.status(500).json({
             message: err.message
         });
@@ -174,18 +251,29 @@ exports.getPostsStatsByType = async (req, res) => {
 };
 
 
-// GROUP BY 2 - סטטיסטיקה לפי תאריך
+// ========================================
+// GROUP BY 2
+// קיבוץ לפי תאריך
+// ========================================
 exports.getPostsStatsByDate = async (req, res) => {
     try {
         const stats = await Post.aggregate([
             {
                 $group: {
                     _id: {
-                        year: { $year: '$createdAt' },
-                        month: { $month: '$createdAt' },
-                        day: { $dayOfMonth: '$createdAt' }
+                        year: {
+                            $year: '$createdAt'
+                        },
+                        month: {
+                            $month: '$createdAt'
+                        },
+                        day: {
+                            $dayOfMonth: '$createdAt'
+                        }
                     },
-                    totalPosts: { $sum: 1 }
+                    totalPosts: {
+                        $sum: 1
+                    }
                 }
             },
             {
@@ -200,8 +288,6 @@ exports.getPostsStatsByDate = async (req, res) => {
         res.status(200).json(stats);
 
     } catch (err) {
-        console.error('Error fetching post date stats:', err);
-
         res.status(500).json({
             message: err.message
         });
@@ -209,7 +295,7 @@ exports.getPostsStatsByDate = async (req, res) => {
 };
 
 
-// UPDATE - עדכון פוסט
+// UPDATE
 exports.updatePost = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -217,14 +303,6 @@ exports.updatePost = async (req, res) => {
                 message: 'Invalid post ID'
             });
         }
-
-        const {
-            title,
-            content,
-            postType,
-            mediaUrl,
-            userId
-        } = req.body;
 
         const post = await Post.findById(req.params.id);
 
@@ -234,16 +312,22 @@ exports.updatePost = async (req, res) => {
             });
         }
 
-        // בדיקת הרשאה זמנית.
-        // יפתח יוכל בהמשך להחליף אותה ב-Session/Authentication.
+        // הרשאה לפי session
         if (
-            post.author &&
-            post.author.toString() !== userId
+            !post.author ||
+            post.author.toString() !== req.session.userId
         ) {
             return res.status(403).json({
                 message: 'Permission denied: You can only edit your own posts'
             });
         }
+
+        const {
+            title,
+            content,
+            postType,
+            mediaUrl
+        } = req.body;
 
         if (title !== undefined) {
             post.title = title;
@@ -266,8 +350,6 @@ exports.updatePost = async (req, res) => {
         res.status(200).json(updatedPost);
 
     } catch (err) {
-        console.error('Error updating post:', err);
-
         res.status(400).json({
             message: err.message
         });
@@ -275,7 +357,7 @@ exports.updatePost = async (req, res) => {
 };
 
 
-// DELETE - מחיקת פוסט
+// DELETE
 exports.deletePost = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -283,8 +365,6 @@ exports.deletePost = async (req, res) => {
                 message: 'Invalid post ID'
             });
         }
-
-        const { userId } = req.body;
 
         const post = await Post.findById(req.params.id);
 
@@ -294,11 +374,9 @@ exports.deletePost = async (req, res) => {
             });
         }
 
-        // בדיקת הרשאה זמנית.
-        // יפתח יוכל להחליף אותה ב-Session/Authentication.
         if (
-            post.author &&
-            post.author.toString() !== userId
+            !post.author ||
+            post.author.toString() !== req.session.userId
         ) {
             return res.status(403).json({
                 message: 'Permission denied: You can only delete your own posts'
@@ -312,8 +390,6 @@ exports.deletePost = async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Error deleting post:', err);
-
         res.status(500).json({
             message: err.message
         });

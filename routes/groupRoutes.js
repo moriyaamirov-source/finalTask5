@@ -2,20 +2,52 @@ const express = require('express');
 const router = express.Router();
 
 const groupController = require('../controllers/groupController');
+const { requireAuth } = require('../middleware/authMiddleware');
+
 
 // CREATE
-router.post('/', groupController.createGroup);
+// חייב להיות מחובר
+router.post(
+    '/',
+    requireAuth,
+    groupController.createGroup
+);
 
-// READ - all
-router.get('/', groupController.getAllGroups);
 
-// READ - by ID
-router.get('/:id', groupController.getGroupById);
+// READ ALL
+// פתוח גם בלי Login
+router.get(
+    '/',
+    groupController.getGroups
+);
+
+
+// READ BY ID
+// פתוח גם בלי Login
+router.get(
+    '/:id',
+    groupController.getGroupById
+);
+
 
 // UPDATE
-router.put('/:id', groupController.updateGroup);
+// חייב Login
+// ה-controller גם בודק שזה ה-admin
+router.put(
+    '/:id',
+    requireAuth,
+    groupController.updateGroup
+);
+
 
 // DELETE
-router.delete('/:id', groupController.deleteGroup);
+// חייב Login
+// ה-controller גם בודק שזה ה-admin
+router.delete(
+    '/:id',
+    requireAuth,
+    groupController.deleteGroup
+);
+
 
 module.exports = router;

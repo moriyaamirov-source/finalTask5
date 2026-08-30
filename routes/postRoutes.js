@@ -2,16 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const postController = require('../controllers/postController');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 
-// Advanced search
+// SEARCHES
 router.get(
     '/search/advanced',
     postController.advancedSearchPosts
 );
 
+router.get(
+    '/search/filter',
+    postController.filterPosts
+);
 
-// GroupBy / Statistics
+
+// GROUP BY
 router.get(
     '/stats/type',
     postController.getPostsStatsByType
@@ -25,33 +31,35 @@ router.get(
 
 // CRUD
 
-// CREATE
+// CREATE - רק משתמש מחובר
 router.post(
     '/',
+    requireAuth,
     postController.createPost
 );
 
-// READ - all
+// READ - אפשר לקרוא בלי Login
 router.get(
     '/',
     postController.getPosts
 );
 
-// READ - by ID
 router.get(
     '/:id',
     postController.getPostById
 );
 
-// UPDATE
+// UPDATE - רק משתמש מחובר
 router.put(
     '/:id',
+    requireAuth,
     postController.updatePost
 );
 
-// DELETE
+// DELETE - רק משתמש מחובר
 router.delete(
     '/:id',
+    requireAuth,
     postController.deletePost
 );
 

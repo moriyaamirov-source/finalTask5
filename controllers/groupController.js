@@ -2,39 +2,71 @@ const Group = require('../models/Group');
 const mongoose = require('mongoose');
 
 
-// CREATE - יצירת קבוצה חדשה
+// ========================================
+// CREATE GROUP
+// רק משתמש מחובר יכול ליצור קבוצה
+// המשתמש שיוצר את הקבוצה הופך אוטומטית ל-admin
+// ========================================
 exports.createGroup = async (req, res) => {
     try {
-        const { name, description, region, admin, members } = req.body;
+        const {
+            name,
+            description,
+            region,
+            members
+        } = req.body;
+
+        if (!name || !region) {
+            return res.status(400).json({
+                message: 'Name and region are required'
+            });
+        }
 
         const newGroup = new Group({
             name,
             description,
             region,
-            admin,
+
+            // לא מקבלים admin מהלקוח
+            // המשתמש המחובר הוא האדמין
+            admin: req.session.userId,
+
             members: members || []
         });
 
         const savedGroup = await newGroup.save();
 
-        res.status(201).json(savedGroup);
+        const populatedGroup = await Group.findById(savedGroup._id)
+            .populate('admin', 'username')
+            .populate('members', 'username');
+
+        res.status(201).json(populatedGroup);
 
     } catch (err) {
         console.error('Error creating group:', err);
 
-        res.status(500).json({
-            message: 'Failed to create group'
+        if (err.code === 11000) {
+            return res.status(409).json({
+                message: 'Group name already exists'
+            });
+        }
+
+        res.status(400).json({
+            message: err.message
         });
     }
 };
 
 
-// READ - שליפת כל הקבוצות
-exports.getAllGroups = async (req, res) => {
+// ========================================
+// GET ALL GROUPS
+// ========================================
+exports.getGroups = async (req, res) => {
     try {
         const groups = await Group.find()
             .populate('admin', 'username')
-            .populate('members', 'username');
+            .populate('members', 'username')
+            .sort({ createdAt: -1 });
 
         res.status(200).json(groups);
 
@@ -48,11 +80,11 @@ exports.getAllGroups = async (req, res) => {
 };
 
 
-// READ - שליפת קבוצה לפי ID
+// ========================================
+// GET GROUP BY ID
+// ========================================
 exports.getGroupById = async (req, res) => {
     try {
-
-        // בדיקה שה-ID בפורמט תקין של MongoDB
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: 'Invalid group ID'
@@ -81,14 +113,33 @@ exports.getGroupById = async (req, res) => {
 };
 
 
-// UPDATE - עדכון קבוצה
+// ========================================
+// UPDATE GROUP
+// רק ה-admin של הקבוצה יכול לעדכן
+// ========================================
 exports.updateGroup = async (req, res) => {
     try {
-
-        // בדיקה שה-ID בפורמט תקין של MongoDB
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: 'Invalid group ID'
+            });
+        }
+
+        const group = await Group.findById(req.params.id);
+
+        if (!group) {
+            return res.status(404).json({
+                message: 'Group not found'
+            });
+        }
+
+        // בדיקת הרשאה
+        if (
+            !group.admin ||
+            group.admin.toString() !== req.session.userId
+        ) {
+            return res.status(403).json({
+                message: 'Permission denied: Only the group admin can update this group'
             });
         }
 
@@ -96,61 +147,81 @@ exports.updateGroup = async (req, res) => {
             name,
             description,
             region,
-            admin,
             members
         } = req.body;
 
-        const updatedGroup = await Group.findByIdAndUpdate(
-            req.params.id,
-            {
-                name,
-                description,
-                region,
-                admin,
-                members
-            },
-            {
-                new: true,
-                runValidators: true
-            }
-        );
-
-        if (!updatedGroup) {
-            return res.status(404).json({
-                message: 'Group not found'
-            });
+        // מעדכנים רק שדות שהגיעו בבקשה
+        if (name !== undefined) {
+            group.name = name;
         }
 
-        res.status(200).json(updatedGroup);
+        if (description !== undefined) {
+            group.description = description;
+        }
+
+        if (region !== undefined) {
+            group.region = region;
+        }
+
+        if (members !== undefined) {
+            group.members = members;
+        }
+
+        const updatedGroup = await group.save();
+
+        const populatedGroup = await Group.findById(updatedGroup._id)
+            .populate('admin', 'username')
+            .populate('members', 'username');
+
+        res.status(200).json(populatedGroup);
 
     } catch (err) {
         console.error('Error updating group:', err);
 
-        res.status(500).json({
-            message: 'Failed to update group'
+        if (err.code === 11000) {
+            return res.status(409).json({
+                message: 'Group name already exists'
+            });
+        }
+
+        res.status(400).json({
+            message: err.message
         });
     }
 };
 
 
-// DELETE - מחיקת קבוצה
+// ========================================
+// DELETE GROUP
+// רק ה-admin של הקבוצה יכול למחוק
+// ========================================
 exports.deleteGroup = async (req, res) => {
     try {
-
-        // בדיקה שה-ID בפורמט תקין של MongoDB
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: 'Invalid group ID'
             });
         }
 
-        const deletedGroup = await Group.findByIdAndDelete(req.params.id);
+        const group = await Group.findById(req.params.id);
 
-        if (!deletedGroup) {
+        if (!group) {
             return res.status(404).json({
                 message: 'Group not found'
             });
         }
+
+        // בדיקת הרשאה
+        if (
+            !group.admin ||
+            group.admin.toString() !== req.session.userId
+        ) {
+            return res.status(403).json({
+                message: 'Permission denied: Only the group admin can delete this group'
+            });
+        }
+
+        await Group.findByIdAndDelete(req.params.id);
 
         res.status(200).json({
             message: 'Group deleted successfully'

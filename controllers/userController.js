@@ -1,8 +1,9 @@
 const User = require('../models/User');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 
-// CREATE - יצירת משתמש חדש
+// CREATE
 exports.createUser = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -10,6 +11,12 @@ exports.createUser = async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({
                 message: 'Username and password are required'
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                message: 'Password must contain at least 6 characters'
             });
         }
 
@@ -21,9 +28,11 @@ exports.createUser = async (req, res) => {
             });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = new User({
             username,
-            password
+            password: hashedPassword
         });
 
         const savedUser = await newUser.save();
@@ -44,7 +53,7 @@ exports.createUser = async (req, res) => {
 };
 
 
-// READ - שליפת כל המשתמשים
+// READ ALL
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password');
@@ -61,7 +70,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 
-// READ - שליפת משתמש לפי ID
+// READ BY ID
 exports.getUserById = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -70,7 +79,8 @@ exports.getUserById = async (req, res) => {
             });
         }
 
-        const user = await User.findById(req.params.id).select('-password');
+        const user = await User.findById(req.params.id)
+            .select('-password');
 
         if (!user) {
             return res.status(404).json({
@@ -90,12 +100,19 @@ exports.getUserById = async (req, res) => {
 };
 
 
-// UPDATE - עדכון משתמש
+// UPDATE OWN USER
 exports.updateUser = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: 'Invalid user ID'
+            });
+        }
+
+        // משתמש יכול לעדכן רק את עצמו
+        if (req.session.userId !== req.params.id) {
+            return res.status(403).json({
+                message: 'Permission denied'
             });
         }
 
@@ -133,6 +150,9 @@ exports.updateUser = async (req, res) => {
             });
         }
 
+        // מעדכנים גם את שם המשתמש ב-session
+        req.session.username = updatedUser.username;
+
         res.status(200).json(updatedUser);
 
     } catch (err) {
@@ -145,12 +165,18 @@ exports.updateUser = async (req, res) => {
 };
 
 
-// DELETE - מחיקת משתמש
+// DELETE OWN USER
 exports.deleteUser = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
                 message: 'Invalid user ID'
+            });
+        }
+
+        if (req.session.userId !== req.params.id) {
+            return res.status(403).json({
+                message: 'Permission denied'
             });
         }
 
@@ -161,6 +187,8 @@ exports.deleteUser = async (req, res) => {
                 message: 'User not found'
             });
         }
+
+        req.session.destroy(() => {});
 
         res.status(200).json({
             message: 'User deleted successfully'

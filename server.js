@@ -8,16 +8,11 @@ const app = express();
 
 
 // ==============================
-// Middleware
+// Middleware & Static Files
 // ==============================
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
-// ==============================
-// Static Files
-// ==============================
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
@@ -65,10 +60,16 @@ const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
 
+// החלק של נועה
+const apiRoutes = require('./routes/apiRoutes');
+
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
+
+// החלק של נועה
+app.use('/api', apiRoutes);
 
 
 // ==============================

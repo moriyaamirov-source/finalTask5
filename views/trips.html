@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Israeli Trips - מסלולי טיול</title>
-    <link rel="stylesheet" href="StyleSheet1.css">
-    <link rel="stylesheet" href="trips.css">
-    <script src="Trips.js" defer></script>
+    <link rel="stylesheet" href="/css/StyleSheet1.css">
+    <link rel="stylesheet" href="/css/trips.css">
+    <script src="/js/trips.js" defer></script>
 </head>
 <body>
     <nav class="navbar">
@@ -15,6 +15,7 @@
             <a href="homePage.html">בית</a>
             <a href="trips.html">טיולים</a>
             <a href="tips.html">טיפים</a>
+            <a href="analytics.html">סטטיסטיקות</a>
             <a href="login.html">התחברות</a>
             <a href="register.html">הרשמה</a>
         </div>
@@ -22,7 +23,7 @@
 
     <main class="main-container">
         <h2>מאגר 40 המסלולים המלא של ישראל</h2>
-        
+
         <div class="tips-btn-wrapper">
             <a href="tips.html" class="btn-main-tips">לחצו כאן לטיפים והנחיות בטיחות</a>
         </div>
@@ -38,49 +39,50 @@
                     <th>אזור</th>
                     <th id="sortTimeHeader" style="cursor:pointer;" title="לחצו למיון">משך זמן (שעות) ⇅</th>
                     <th>רמת קושי</th>
+                    <th>מזג אוויר כעת</th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-description="מסלול הליכה נגיש ורטוב בנחל זורם, מושלם למשפחות עם עגלות וילדים קטנים."><td>נחל השופט</td><td>צפון</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="שמורה הכוללת את המעיינות הגדולים בישראל, תל ארכיאולוגי ובריכת שכשוך."><td>תל דן</td><td>צפון</td><td>2.5 שעות</td><td>קל</td></tr>
-                <tr data-description="שמורת טבע סביב מעיינות נחל נעמן, עם שביל צף מעל הביצה וטחנת קמח עתיקה."><td>עין אפק</td><td>צפון</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="תצפיות על ציפורים נודדות, גשר צף מעל האגם ועדר תאו (ג'מוסים)."><td>שמורת החולה</td><td>צפון</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="ביקור במפל הבניאס המרשים והליכה על השביל התלוי מעל המים הגועשים."><td>נחל חרמון (בניאס)</td><td>צפון</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="טיול ארוך בנחל איתן אל עין טמיר, הכולל הליכה במים ונוף של מבצר המונפורט."><td>נחל כזיב</td><td>צפון</td><td>5 שעות</td><td>בינוני</td></tr>
-                <tr data-description="מסלול קלאסי בגליל העליון עם בריכות מים צלולות, בוסתנים וטחנות קמח."><td>נחל עמוד</td><td>צפון</td><td>4 שעות</td><td>בינוני</td></tr>
-                <tr data-description="תצפית מרהיבה על הכנרת והגולן הכוללת ירידה תלולה ביתדות (סולמות) בסלע."><td>הר ארבל</td><td>צפון</td><td>3 שעות</td><td>בינוני</td></tr>
-                <tr data-description="טיול רגוע לאורך נחל זורם בגליל התחתון, מתאים גם לרכיבה על אופניים."><td>נחל ציפורי</td><td>צפון</td><td>4 שעות</td><td>בינוני</td></tr>
-                <tr data-description="נוף של 'טוסקנה' ישראלית, מרבדי פריחה בחורף ומסלולים רחבים בין גבעות."><td>רמות מנשה</td><td>צפון</td><td>3 שעות</td><td>בינוני</td></tr>
-                <tr data-description="מסלול אתגרי הכולל שחייה בבריכות עמוקות וירידה במפלים (מחייב נעליים להליכה במים)."><td>נחל יהודיה</td><td>צפון</td><td>6 שעות</td><td>קשה</td></tr>
-                <tr data-description="מסלול במורד קניון בזלת עמוק עם בריכות מים גדולות וקפיצות למים."><td>זוויתן עליון</td><td>צפון</td><td>6.5 שעות</td><td>קשה</td></tr>
-                <tr data-description="ירידה אל המפל הגבוה ביותר בגולן ובריכה גדולה בתחתיתו."><td>נחל ג'ילבון</td><td>צפון</td><td>5 שעות</td><td>קשה</td></tr>
-                <tr data-description="עלייה למבצר צלבני מרשים הצופה על ערוץ נחל כזיב."><td>מבצר המונפורט</td><td>צפון</td><td>3 שעות</td><td>בינוני</td></tr>
-                <tr data-description="סיור במערה מרהיבה עם נטיפים וזקיפים בצורות שונות (שמורת אבשלום)."><td>מערת הנטיפים</td><td>מרכז</td><td>1 שעות</td><td>קל</td></tr>
-                <tr data-description="הליכה רגועה בריאה הירוקה של תל אביב לאורך שפת הנחל."><td>פארק הירקון</td><td>מרכז</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="מבצר צלבני על מצוק כורכר מעל הים, שקיעות מדהימות ומסלול ארכיאולוגי."><td>אפולוניה</td><td>מרכז</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="מסלול ליד נחל זורם בו ניתן לצפות בצבי נחל גדולים על 'גשר הצבים'."><td>נחל אלכסנדר</td><td>מרכז</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="תצפית פנורמית על מישור החוף ואתר הנצחה לחיל הלוגיסטיקה בין עצי אורן."><td>תל חדיד</td><td>מרכז</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="מעיינות ניקבה עתיקים שניתן להיכנס אליהם עם פנסים וחקלאות שלחין עתיקה."><td>הסטף</td><td>מרכז</td><td>3 שעות</td><td>בינוני</td></tr>
-                <tr data-description="מסלול מוצל בהרי ירושלים עם פריחה עונתית וירידה לערוץ נחל סלעי."><td>נחל קטלב</td><td>מרכז</td><td>4 שעות</td><td>בינוני</td></tr>
-                <tr data-description="מתחם מערות פעמון ענקיות מתחת לאדמה שניתן לחקור ולזחול בהן."><td>מערות לוזית</td><td>מרכז</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="גן לאומי עם תעלות מים, מדשאות רחבות ומבצר צלבני קטן."><td>עין חמד</td><td>מרכז</td><td>1 שעות</td><td>קל</td></tr>
-                <tr data-description="הליכה בנחל בהרי ירושלים המסתיימת במערת התאומים המסתורית."><td>נחל המערה</td><td>מרכז</td><td>3.5 שעות</td><td>בינוני</td></tr>
-                <tr data-description="מסלול אתגרי בהרי ירושלים עם עליות תלולות ונוף פראי."><td>נחל כפירה</td><td>מרכז</td><td>5 שעות</td><td>קשה</td></tr>
-                <tr data-description="מעבר בין מעיינות קטנים ומרעננים בהרי ירושלים (עין חנדק ועוד)."><td>שביל המעיינות</td><td>מרכז</td><td>3 שעות</td><td>בינוני</td></tr>
-                <tr data-description="אתר היסטורי עם לוח גזר המפורסם ותצפית 360 מעלות על השפלה."><td>תל גזר</td><td>מרכז</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="המסלול האתגרי ביותר במדבר יהודה הכולל סולמות, חבלים ושחייה בגבים עמוקים."><td>נחל דרגה</td><td>דרום</td><td>8 שעות</td><td>קשה</td></tr>
-                <tr data-description="קניון צר עם יתדות ברזל גבוהות בתוך המצוקים (לא למפחדים מגבהים)."><td>נחל אוג</td><td>דרום</td><td>4 שעות</td><td>קשה</td></tr>
-                <tr data-description="עלייה תלולה ומפורסמת למבצר מצדה בזריחה, חוויה פיזית והיסטורית."><td>שביל הנחש</td><td>דרום</td><td>2.5 שעות</td><td>קשה</td></tr>
-                <tr data-description="טיפוס אתגרי בסולמות בתוך קניון צר בדרום ים המלח."><td>נחל תמר</td><td>דרום</td><td>3 שעות</td><td>קשה</td></tr>
-                <tr data-description="אחד ההרים היפים והתלולים באילת, נוף משוגע למפרץ אילת וירדן."><td>הר שלמה</td><td>דרום</td><td>5 שעות</td><td>קשה</td></tr>
-                <tr data-description="נוווה מדבר עם מפלים ובריכות מים, ניתן לראות יעלים ושפני סלע מקרוב."><td>נחל דוד</td><td>דרום</td><td>2 שעות</td><td>בינוני</td></tr>
-                <tr data-description="המשך של נחל דוד למטיבי לכת, הליכה במים עד לבריכות נסתרות."><td>נחל ערוגות</td><td>דרום</td><td>4 שעות</td><td>בינוני</td></tr>
-                <tr data-description="קניון מרשים עם מפל גבוה ובריכות מים קרירות בלב המדבר."><td>עין עבדת</td><td>דרום</td><td>2 שעות</td><td>קל</td></tr>
-                <tr data-description="הליכה בתוך נקיק סלע בצבע אדום מרהיב בערבה, קצר וקולע."><td>הקניון האדום</td><td>דרום</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="נחל אתגרי הכולל סולמות וירידות במפלים יבשים בערבה."><td>נחל צפית</td><td>דרום</td><td>4.5 שעות</td><td>בינוני</td></tr>
-                <tr data-description="תצפיות על המכתש הגדול בעולם וביקור במרכז המבקרים ע''ש אילן רמון."><td>מכתש רמון</td><td>דרום</td><td>1 שעות</td><td>קל</td></tr>
-                <tr data-description="שטח פתוח ליד באר שבע המתאים לפיקניקים והליכה קלה בטבע עירוני."><td>פארק הבשור</td><td>דרום</td><td>1.5 שעות</td><td>קל</td></tr>
-                <tr data-description="נחל עם קטעי מעבר צרים ('סלאלום') בין הסלעים וסולמות מאתגרים."><td>נחל גוב</td><td>דרום</td><td>4 שעות</td><td>בינוני</td></tr>
+                <tr data-region="north" data-description="מסלול הליכה נגיש ורטוב בנחל זורם, מושלם למשפחות עם עגלות וילדים קטנים."><td>נחל השופט</td><td>צפון</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="שמורה הכוללת את המעיינות הגדולים בישראל, תל ארכיאולוגי ובריכת שכשוך."><td>תל דן</td><td>צפון</td><td>2.5 שעות</td><td>קל</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="שמורת טבע סביב מעיינות נחל נעמן, עם שביל צף מעל הביצה וטחנת קמח עתיקה."><td>עין אפק</td><td>צפון</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="תצפיות על ציפורים נודדות, גשר צף מעל האגם ועדר תאו (ג'מוסים)."><td>שמורת החולה</td><td>צפון</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="ביקור במפל הבניאס המרשים והליכה על השביל התלוי מעל המים הגועשים."><td>נחל חרמון (בניאס)</td><td>צפון</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="טיול ארוך בנחל איתן אל עין טמיר, הכולל הליכה במים ונוף של מבצר המונפורט."><td>נחל כזיב</td><td>צפון</td><td>5 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="מסלול קלאסי בגליל העליון עם בריכות מים צלולות, בוסתנים וטחנות קמח."><td>נחל עמוד</td><td>צפון</td><td>4 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="תצפית מרהיבה על הכנרת והגולן הכוללת ירידה תלולה ביתדות (סולמות) בסלע."><td>הר ארבל</td><td>צפון</td><td>3 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="טיול רגוע לאורך נחל זורם בגליל התחתון, מתאים גם לרכיבה על אופניים."><td>נחל ציפורי</td><td>צפון</td><td>4 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="נוף של 'טוסקנה' ישראלית, מרבדי פריחה בחורף ומסלולים רחבים בין גבעות."><td>רמות מנשה</td><td>צפון</td><td>3 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="מסלול אתגרי הכולל שחייה בבריכות עמוקות וירידה במפלים (מחייב נעליים להליכה במים)."><td>נחל יהודיה</td><td>צפון</td><td>6 שעות</td><td>קשה</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="מסלול במורד קניון בזלת עמוק עם בריכות מים גדולות וקפיצות למים."><td>זוויתן עליון</td><td>צפון</td><td>6.5 שעות</td><td>קשה</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="ירידה אל המפל הגבוה ביותר בגולן ובריכה גדולה בתחתיתו."><td>נחל ג'ילבון</td><td>צפון</td><td>5 שעות</td><td>קשה</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="north" data-description="עלייה למבצר צלבני מרשים הצופה על ערוץ נחל כזיב."><td>מבצר המונפורט</td><td>צפון</td><td>3 שעות</td><td>בינוני</td><td class="weather-cell" data-region="north">טוען...</td></tr>
+                <tr data-region="center" data-description="סיור במערה מרהיבה עם נטיפים וזקיפים בצורות שונות (שמורת אבשלום)."><td>מערת הנטיפים</td><td>מרכז</td><td>1 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="הליכה רגועה בריאה הירוקה של תל אביב לאורך שפת הנחל."><td>פארק הירקון</td><td>מרכז</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מבצר צלבני על מצוק כורכר מעל הים, שקיעות מדהימות ומסלול ארכיאולוגי."><td>אפולוניה</td><td>מרכז</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מסלול ליד נחל זורם בו ניתן לצפות בצבי נחל גדולים על 'גשר הצבים'."><td>נחל אלכסנדר</td><td>מרכז</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="תצפית פנורמית על מישור החוף ואתר הנצחה לחיל הלוגיסטיקה בין עצי אורן."><td>תל חדיד</td><td>מרכז</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מעיינות ניקבה עתיקים שניתן להיכנס אליהם עם פנסים וחקלאות שלחין עתיקה."><td>הסטף</td><td>מרכז</td><td>3 שעות</td><td>בינוני</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מסלול מוצל בהרי ירושלים עם פריחה עונתית וירידה לערוץ נחל סלעי."><td>נחל קטלב</td><td>מרכז</td><td>4 שעות</td><td>בינוני</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מתחם מערות פעמון ענקיות מתחת לאדמה שניתן לחקור ולזחול בהן."><td>מערות לוזית</td><td>מרכז</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="גן לאומי עם תעלות מים, מדשאות רחבות ומבצר צלבני קטן."><td>עין חמד</td><td>מרכז</td><td>1 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="הליכה בנחל בהרי ירושלים המסתיימת במערת התאומים המסתורית."><td>נחל המערה</td><td>מרכז</td><td>3.5 שעות</td><td>בינוני</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מסלול אתגרי בהרי ירושלים עם עליות תלולות ונוף פראי."><td>נחל כפירה</td><td>מרכז</td><td>5 שעות</td><td>קשה</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="מעבר בין מעיינות קטנים ומרעננים בהרי ירושלים (עין חנדק ועוד)."><td>שביל המעיינות</td><td>מרכז</td><td>3 שעות</td><td>בינוני</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="center" data-description="אתר היסטורי עם לוח גזר המפורסם ותצפית 360 מעלות על השפלה."><td>תל גזר</td><td>מרכז</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="center">טוען...</td></tr>
+                <tr data-region="south" data-description="המסלול האתגרי ביותר במדבר יהודה הכולל סולמות, חבלים ושחייה בגבים עמוקים."><td>נחל דרגה</td><td>דרום</td><td>8 שעות</td><td>קשה</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="קניון צר עם יתדות ברזל גבוהות בתוך המצוקים (לא למפחדים מגבהים)."><td>נחל אוג</td><td>דרום</td><td>4 שעות</td><td>קשה</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="עלייה תלולה ומפורסמת למבצר מצדה בזריחה, חוויה פיזית והיסטורית."><td>שביל הנחש</td><td>דרום</td><td>2.5 שעות</td><td>קשה</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="טיפוס אתגרי בסולמות בתוך קניון צר בדרום ים המלח."><td>נחל תמר</td><td>דרום</td><td>3 שעות</td><td>קשה</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="אחד ההרים היפים והתלולים באילת, נוף משוגע למפרץ אילת וירדן."><td>הר שלמה</td><td>דרום</td><td>5 שעות</td><td>קשה</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="נוווה מדבר עם מפלים ובריכות מים, ניתן לראות יעלים ושפני סלע מקרוב."><td>נחל דוד</td><td>דרום</td><td>2 שעות</td><td>בינוני</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="המשך של נחל דוד למטיבי לכת, הליכה במים עד לבריכות נסתרות."><td>נחל ערוגות</td><td>דרום</td><td>4 שעות</td><td>בינוני</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="קניון מרשים עם מפל גבוה ובריכות מים קרירות בלב המדבר."><td>עין עבדת</td><td>דרום</td><td>2 שעות</td><td>קל</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="הליכה בתוך נקיק סלע בצבע אדום מרהיב בערבה, קצר וקולע."><td>הקניון האדום</td><td>דרום</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="נחל אתגרי הכולל סולמות וירידות במפלים יבשים בערבה."><td>נחל צפית</td><td>דרום</td><td>4.5 שעות</td><td>בינוני</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="תצפיות על המכתש הגדול בעולם וביקור במרכז המבקרים ע''ש אילן רמון."><td>מכתש רמון</td><td>דרום</td><td>1 שעות</td><td>קל</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="שטח פתוח ליד באר שבע המתאים לפיקניקים והליכה קלה בטבע עירוני."><td>פארק הבשור</td><td>דרום</td><td>1.5 שעות</td><td>קל</td><td class="weather-cell" data-region="south">טוען...</td></tr>
+                <tr data-region="south" data-description="נחל עם קטעי מעבר צרים ('סלאלום') בין הסלעים וסולמות מאתגרים."><td>נחל גוב</td><td>דרום</td><td>4 שעות</td><td>בינוני</td><td class="weather-cell" data-region="south">טוען...</td></tr>
             </tbody>
         </table>
     </main>

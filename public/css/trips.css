@@ -60,7 +60,7 @@ h2 {
     overflow: hidden;
 }
 
-.trip-table th, 
+.trip-table th,
 .trip-table td {
     padding: 14px;
     text-align: right;
@@ -81,11 +81,227 @@ h2 {
     background-color: #f5f5f5;
 }
 
-/* כיוון ויישור עמודת מזג האוויר בלייב */
+
+/* ================= מזג אוויר ================= */
+
 .weather-cell {
     direction: ltr;
     text-align: right;
     white-space: nowrap;
     font-weight: bold;
     color: #1b5e20;
+}
+
+
+/* ================= מפה ================= */
+
+.map-section {
+    margin: 30px 0;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #2e7d32;
+}
+
+.map-section h3 {
+    color: #2e7d32;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+#map {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    border: 1px solid #c8e6c9;
+}
+
+.map-status {
+    margin-top: 10px;
+    color: #555555;
+    font-size: 14px;
+}
+
+
+/* ================= טופס ================= */
+
+.add-trip-section {
+    margin: 30px 0;
+    background: #f1f8e9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #c8e6c9;
+}
+
+.add-trip-section h3 {
+    color: #1b5e20;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.trip-form-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+/* גם input וגם select נראים אותו דבר */
+
+.trip-form-grid input,
+.trip-form-grid select {
+    padding: 10px;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    flex: 1;
+    min-width: 150px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: white;
+    color: #333333;
+    box-sizing: border-box;
+}
+
+.trip-form-grid select {
+    cursor: pointer;
+}
+
+.trip-form-grid input:focus,
+.trip-form-grid select:focus {
+    outline: none;
+    border-color: #2e7d32;
+}
+
+
+/* ================= כפתורי טופס ================= */
+
+.trip-form-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-add-trip {
+    margin-top: 15px;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: inherit;
+}
+
+.btn-add-trip:hover {
+    background-color: #1b5e20;
+}
+
+.btn-cancel-edit {
+    margin-top: 15px;
+    background-color: #ffffff;
+    color: #555555;
+    border: 1px solid #aaaaaa;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-cancel-edit:hover {
+    background-color: #eeeeee;
+}
+
+.trip-message,
+.ajax-message {
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+
+/* ================= פעולות בטבלה ================= */
+
+.trip-action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-map,
+.btn-edit,
+.btn-delete {
+    border: none;
+    border-radius: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.btn-map {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.btn-edit {
+    background-color: #fff8e1;
+    color: #8d6e00;
+}
+
+.btn-delete {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.btn-map:hover,
+.btn-edit:hover,
+.btn-delete:hover {
+    opacity: 0.75;
+}
+
+
+/* תאימות לקוד הישן */
+
+.btn-delete-ajax {
+    color: #d32f2f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-delete-ajax:hover {
+    text-decoration: underline;
+}
+
+
+/* ================= Responsive ================= */
+
+@media (max-width: 700px) {
+    .trip-form-grid {
+        flex-direction: column;
+    }
+
+    .trip-form-grid input,
+    .trip-form-grid select {
+        width: 100%;
+    }
+
+    #map {
+        height: 330px;
+    }
+
+    .trip-table {
+        font-size: 13px;
+    }
+
+    .trip-table th,
+    .trip-table td {
+        padding: 9px;
+    }
 }

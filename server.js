@@ -4,18 +4,24 @@ const path = require('path');
 const session = require('express-session');
 require('dotenv').config();
 
+const mapsKey = process.env.GOOGLE_MAPS_API_KEY;
+
+console.log(
+    'MAP KEY CHECK:',
+    mapsKey
+        ? `${mapsKey.substring(0, 4)}...${mapsKey.substring(mapsKey.length - 4)} | length=${mapsKey.length}`
+        : 'MISSING'
+);
+
 const app = express();
 
 
 // ==============================
-// Middleware & Static Files
+// Middleware
 // ==============================
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'views')));
 
 
 // ==============================
@@ -35,7 +41,7 @@ app.use(session({
 
 
 // ==============================
-// MongoDB Connection
+// MongoDB
 // ==============================
 
 const MONGO_URI =
@@ -52,6 +58,35 @@ mongoose.connect(MONGO_URI)
 
 
 // ==============================
+// Google Maps Key
+// שימי לב: זה לפני apiRoutes
+// ==============================
+
+app.get('/api/maps-key', (req, res) => {
+
+    console.log('GET /api/maps-key received');
+
+    const key = process.env.GOOGLE_MAPS_API_KEY;
+
+    if (!key) {
+        console.log('GOOGLE_MAPS_API_KEY is missing');
+
+        return res.status(500).json({
+            success: false,
+            message: 'Google Maps API Key is missing'
+        });
+    }
+
+    console.log('Google Maps API key found');
+
+    res.json({
+        success: true,
+        key: key
+    });
+});
+
+
+// ==============================
 // Routes
 // ==============================
 
@@ -65,7 +100,16 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
+
 app.use('/api', apiRoutes);
+
+
+// ==============================
+// Static Files
+// ==============================
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'views')));
 
 
 // ==============================
@@ -84,7 +128,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(
-        `Server is running at http://localhost:${PORT}/trips.html`
-    );
+    console.log(`Server file: ${__filename}`);
+    console.log(`Server is running at http://localhost:${PORT}/trips.html`);
+    console.log(`Maps test: http://localhost:${PORT}/api/maps-key`);
 });

@@ -53,9 +53,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (isValid) {
-            // שמירת השם המלא בדפדפן והעברה לדף הבית
-            localStorage.setItem('loggedInUser', fullNameInput.value.trim());
-            window.location.href = 'homePage.html';
+            fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    fullName: fullNameInput.value.trim(),
+                    username: emailInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    password: passwordInput.value
+                })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, body: data })))
+            .then(res => {
+                if (res.ok) {
+                    // תפיסה רחבה של Token מכל שדה אפשרי
+                    const token = res.body.token || res.body.accessToken || res.body.jwt;
+                    if (token) {
+                        localStorage.setItem('token', token);
+                    }
+
+                    if (res.body.userId) localStorage.setItem('userId', res.body.userId);
+                    localStorage.setItem('loggedInUser', fullNameInput.value.trim());
+                    
+                    alert('ההרשמה הושלמה בהצלחה!');
+                    window.location.href = 'homePage.html';
+                } else {
+                    alert('שגיאה בהרשמה: ' + (res.body.message || 'נתונים לא תקינים'));
+                }
+            })
+            .catch(err => {
+                console.error('Register error:', err);
+                alert('שגיאת תקשורת מול השרת');
+            });
         }
     });
 });

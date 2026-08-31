@@ -1,6 +1,7 @@
 const Post = require('../models/Post');
 const { TwitterApi } = require('twitter-api-v2');
 
+
 // 1. יצירת פוסט חדש
 exports.createPost = async (req, res) => {
     try {
@@ -15,6 +16,7 @@ exports.createPost = async (req, res) => {
         });
 
         const savedPost = await newPost.save();
+
         res.status(201).json(savedPost);
 
     } catch (err) {
@@ -121,7 +123,7 @@ exports.getPostsStatsByType = async (req, res) => {
 };
 
 
-// GroupBy נוסף לפי תאריך יצירה
+// 5. GroupBy נוסף לפי תאריך יצירה
 exports.getPostsStatsByDate = async (req, res) => {
     try {
         const stats = await Post.aggregate([
@@ -162,7 +164,7 @@ exports.getPostsStatsByDate = async (req, res) => {
 };
 
 
-// 5. עדכון פוסט
+// 6. עדכון פוסט
 exports.updatePost = async (req, res) => {
     try {
         const {
@@ -208,7 +210,7 @@ exports.updatePost = async (req, res) => {
 };
 
 
-// 6. מחיקת פוסט
+// 7. מחיקת פוסט
 exports.deletePost = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -245,7 +247,7 @@ exports.deletePost = async (req, res) => {
 };
 
 
-// 7. פרסום אמיתי ל-X באמצעות X API
+// 8. פרסום אמיתי ל-X באמצעות X API
 exports.shareToX = async (req, res) => {
     try {
         const {
@@ -255,6 +257,7 @@ exports.shareToX = async (req, res) => {
             X_ACCESS_TOKEN_SECRET
         } = process.env;
 
+        // בדיקה שיש מפתחות
         if (
             !X_API_KEY ||
             !X_API_SECRET ||
@@ -269,6 +272,7 @@ exports.shareToX = async (req, res) => {
 
         const { text } = req.body;
 
+        // בדיקה שהמשתמש באמת הכניס טקסט
         if (!text || !text.trim()) {
             return res.status(400).json({
                 success: false,
@@ -276,6 +280,7 @@ exports.shareToX = async (req, res) => {
             });
         }
 
+        // יצירת חיבור ל-X
         const client = new TwitterApi({
             appKey: X_API_KEY,
             appSecret: X_API_SECRET,
@@ -283,9 +288,20 @@ exports.shareToX = async (req, res) => {
             accessSecret: X_ACCESS_TOKEN_SECRET
         });
 
+        const currentUser = await client.currentUserV2();
+
+        console.log("Connected X account:", currentUser.data);
+
+        // פרסום הפוסט
         const result = await client.v2.tweet(
             text.trim()
         );
+
+        // מדפיס בטרמינל את התגובה שקיבלנו מ-X
+        console.log("X API response:", result);
+
+        // מדפיס גם רק את ה-ID בצורה ברורה
+        console.log("Published X post ID:", result.data.id);
 
         res.status(200).json({
             success: true,
@@ -294,6 +310,7 @@ exports.shareToX = async (req, res) => {
         });
 
     } catch (error) {
+
         console.error(
             'X API error:',
             error

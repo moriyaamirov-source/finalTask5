@@ -8,16 +8,8 @@ const postSchema = new mongoose.Schema({
         enum: ['text', 'image', 'video'], 
         default: 'text' 
     },
-    mediaUrl: { type: String },
-    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    
-    // שדות מיקום עבור המפה הדיגיטלית (Google Maps)
-    location: {
-        address: { type: String, default: '' }, 
-        lat: { type: Number },                   
-        lng: { type: Number }                    
-    },
-
+    mediaUrl: { type: String }, // קישור לתמונה או וידאו במידת הצורך
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // שיוך למשתמש
     createdAt: { type: Date, default: Date.now }
 });
 

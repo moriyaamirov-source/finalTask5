@@ -1,24 +1,10 @@
-let map;
-let markers = [];
-
-// אתחול מפת גוגל
+// אתחול וטעינת הנתונים
 function initMap() {
-    const defaultCenter = { lat: 31.7683, lng: 35.2137 }; 
-    const mapElement = document.getElementById('map');
-    
-    if (mapElement && typeof google !== 'undefined' && google.maps) {
-        map = new google.maps.Map(mapElement, {
-            zoom: 8,
-            center: defaultCenter
-        });
-    }
-
     loadTrips();
 }
-
 window.initMap = initMap;
 
-// טעינת המסלולים מה-DB באמצעות Ajax והצגתם בטבלה ובמפה
+// טעינת המסלולים מה-DB באמצעות Ajax והצגתם בטבלה
 function loadTrips() {
     $.ajax({
         url: '/posts',
@@ -28,7 +14,6 @@ function loadTrips() {
             if (!tbody) return;
             
             tbody.innerHTML = '';
-            clearMarkers();
 
             if (!posts || posts.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">אין מסלולים להצגה עדיין. הוסיפו מסלול ראשון!</td></tr>';
@@ -36,8 +21,8 @@ function loadTrips() {
             }
 
             posts.forEach(post => {
-                // הוספת שורה לטבלה
                 const row = document.createElement('tr');
+                row.style.cursor = 'pointer';
                 row.innerHTML = `
                     <td>${post.title || ''}</td>
                     <td>${post.location?.address || 'כללי'}</td>
@@ -47,12 +32,15 @@ function loadTrips() {
                         <button onclick="deleteTrip('${post._id}')" style="color:red; cursor:pointer;">מחק</button>
                     </td>
                 `;
-                tbody.appendChild(row);
 
-                // הוספת מרקר למפה במידה וקיימות קואורדינטות ומפה אתחלה
-                if (map && post.location && post.location.lat && post.location.lng) {
-                    addMarker(post);
-                }
+                // בלחיצה על שורה בטבלה – המפה מתמקדת במיקום המסלול
+                row.addEventListener('click', function() {
+                    if (post.location?.lat && post.location?.lng) {
+                        updateMapLocation(post.location.lat, post.location.lng);
+                    }
+                });
+
+                tbody.appendChild(row);
             });
         },
         error: function(err) {
@@ -61,39 +49,15 @@ function loadTrips() {
     });
 }
 
-// הוספת מרקר למפה
-function addMarker(post) {
-    if (!map) return;
-    const marker = new google.maps.Marker({
-        position: { lat: Number(post.location.lat), lng: Number(post.location.lng) },
-        map: map,
-        title: post.title
-    });
-
-    const infoWindow = new google.maps.InfoWindow({
-        content: `
-            <div style="direction: rtl; text-align: right;">
-                <h4>${post.title}</h4>
-                <p>${post.content}</p>
-                <small>${post.location.address || ''}</small>
-            </div>
-        `
-    });
-
-    marker.addListener('click', function() {
-        infoWindow.open(map, marker);
-    });
-
-    markers.push(marker);
+// עדכון מיקום המפה ב-Iframe
+function updateMapLocation(lat, lng) {
+    const mapFrame = document.getElementById('mapFrame');
+    if (mapFrame && lat && lng) {
+        mapFrame.src = `https://maps.google.com/maps?q=${lat},${lng}&z=14&output=embed`;
+    }
 }
 
-// ניקוי מרקרים ישנים
-function clearMarkers() {
-    markers.forEach(m => m.setMap(null));
-    markers = [];
-}
-
-// Ajax-מחיקת מסלול ב
+// מחיקת מסלול ב-Ajax
 window.deleteTrip = function(id) {
     if (!confirm('האם למחוק את המסלול?')) return;
 
@@ -111,7 +75,7 @@ window.deleteTrip = function(id) {
     });
 };
 
-// חיפוש בטבלה
+// חיפוש מהיר בטבלה לפי כותרת
 function searchTable() {
     var input = document.getElementById("tableNameSearch");
     var filter = input.value.toLowerCase();
@@ -132,7 +96,7 @@ function searchTable() {
     }
 }
 
-// מיון לפי כותרת/טקסט
+// מיון הטבלה לפי שם המסלול
 var isAsc = true;
 function sortTableByTime() {
     var table = document.getElementById("tripsTable");
@@ -153,6 +117,7 @@ function sortTableByTime() {
     }
 }
 
+// אירועים בטעינת הדף
 document.addEventListener("DOMContentLoaded", function() {
     var searchInput = document.getElementById("tableNameSearch");
     var sortHeader = document.getElementById("sortTimeHeader");
@@ -167,13 +132,16 @@ document.addEventListener("DOMContentLoaded", function() {
         submitBtn.addEventListener("click", function(e) {
             e.preventDefault();
 
+            const latVal = parseFloat(document.getElementById('tripLat')?.value);
+            const lngVal = parseFloat(document.getElementById('tripLng')?.value);
+
             const newPost = {
                 title: document.getElementById('tripTitle')?.value,
                 content: document.getElementById('tripContent')?.value,
                 location: {
                     address: document.getElementById('tripAddress')?.value,
-                    lat: parseFloat(document.getElementById('tripLat')?.value) || 0,
-                    lng: parseFloat(document.getElementById('tripLng')?.value) || 0
+                    lat: !isNaN(latVal) ? latVal : 0,
+                    lng: !isNaN(lngVal) ? lngVal : 0
                 }
             };
 
@@ -186,6 +154,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert('המסלול התווסף בהצלחה!');
                     const form = document.getElementById('addTripForm');
                     if (form) form.reset();
+                    
+                    // במידה והוכנסו קואורדינטות, נמקד את המפה
+                    if (!isNaN(latVal) && !isNaN(lngVal) && latVal !== 0 && lngVal !== 0) {
+                        updateMapLocation(latVal, lngVal);
+                    }
                     loadTrips();
                 },
                 error: function(err) {

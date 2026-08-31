@@ -80,3 +80,98 @@ h2 {
 .trip-table tbody tr:hover {
     background-color: #f5f5f5;
 }
+.main-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 30px;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tips-btn-wrapper {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.btn-main-tips {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 10px 24px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-main-tips:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.search-wrapper {
+    max-width: 550px;
+    margin: 0 auto 25px;
+}
+
+.search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    background-color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.trip-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.trip-table th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 14px;
+    text-align: right;
+}
+
+.trip-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.trip-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.trip-table tbody tr:hover {
+    background-color: #f0f7f0;
+}
+
+.trip-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .trip-table {
+        font-size: 13px;
+    }
+
+    .trip-table th,
+    .trip-table td {
+        padding: 8px;
+    }
+}

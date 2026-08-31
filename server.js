@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 // ==============================
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -59,16 +59,12 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
-
-// החלק של נועה
 const apiRoutes = require('./routes/apiRoutes');
 
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
-
-// החלק של נועה
 app.use('/api', apiRoutes);
 
 

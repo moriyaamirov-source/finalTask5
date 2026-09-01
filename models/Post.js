@@ -29,6 +29,13 @@ const postSchema = new mongoose.Schema({
         ref: 'User'
     },
 
+    // אם הפוסט שייך לקבוצה
+    group: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group',
+        default: null
+    },
+
     // שדות של מסלול טיול
     region: {
         type: String,
@@ -45,7 +52,6 @@ const postSchema = new mongoose.Schema({
         enum: ['קל', 'בינוני', 'קשה']
     },
 
-    // הכתובת נשמרת ב-MongoDB
     location: {
         address: {
             type: String,

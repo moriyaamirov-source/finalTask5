@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>הפיד שלי | Israeli Trips</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/StyleSheet1.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/feed.css"
+    >
+
+    <script
+        src="/js/feed.js?v=1"
+        defer
+    ></script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                Israeli Trips
+            </div>
+
+            <div class="nav-links">
+                <a href="/homePage.html">בית</a>
+                <a href="/trips.html">טיולים</a>
+                <a href="/groups.html">קבוצות</a>
+                <a href="/feed.html">פיד</a>
+                <a href="/friends.html">חברים</a>
+                <a href="/tips.html">טיפים</a>
+                <a href="/analytics.html">סטטיסטיקות</a>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <main class="feed-page">
+
+        <section class="feed-header">
+
+            <div>
+                <h1>הפיד שלי</h1>
+
+                <p id="welcomeMessage">
+                    טוען את הפיד...
+                </p>
+            </div>
+
+            <button
+                id="refreshFeedBtn"
+                type="button"
+                class="feed-button"
+            >
+                רענון
+            </button>
+
+        </section>
+
+
+        <section class="feed-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>מה חדש?</h2>
+
+                    <p>
+                        פוסטים של החברים שלך ושל הקבוצות שבהן את חברה
+                    </p>
+                </div>
+
+            </div>
+
+            <div
+                id="feedStatus"
+                class="status-message"
+            ></div>
+
+            <div
+                id="feedContainer"
+                class="posts-grid"
+            ></div>
+
+        </section>
+
+
+        <section class="feed-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>הפוסטים שלי</h2>
+
+                    <p>
+                        כל הפוסטים שפרסמת
+                    </p>
+                </div>
+
+            </div>
+
+            <div
+                id="myPostsStatus"
+                class="status-message"
+            ></div>
+
+            <div
+                id="myPostsContainer"
+                class="posts-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            Israeli Trips
+        </p>
+    </footer>
+
+</body>
+
+</html>

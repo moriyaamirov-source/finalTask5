@@ -1,5 +1,6 @@
 let currentUserId = null;
 let allGroups = [];
+let selectedGroupId = null;
 
 
 // ========================================
@@ -152,6 +153,21 @@ function escapeHtml(value) {
 }
 
 
+function formatDate(value) {
+    if (!value) {
+        return '';
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return '';
+    }
+
+    return date.toLocaleString('he-IL');
+}
+
+
 // ========================================
 // RENDER GROUPS
 // ========================================
@@ -208,6 +224,15 @@ function renderGroups() {
             actionButtons = `
                 <button
                     type="button"
+                    class="group-btn"
+                    data-action="posts"
+                    data-id="${group._id}"
+                >
+                    פוסטים בקבוצה
+                </button>
+
+                <button
+                    type="button"
                     class="group-btn edit-btn"
                     data-action="edit"
                     data-id="${group._id}"
@@ -227,6 +252,15 @@ function renderGroups() {
 
         } else if (member) {
             actionButtons = `
+                <button
+                    type="button"
+                    class="group-btn"
+                    data-action="posts"
+                    data-id="${group._id}"
+                >
+                    פוסטים בקבוצה
+                </button>
+
                 <button
                     type="button"
                     class="group-btn leave-btn"
@@ -286,7 +320,6 @@ function renderGroups() {
 
             </div>
 
-
             <p class="group-description">
                 ${
                     escapeHtml(
@@ -295,7 +328,6 @@ function renderGroups() {
                     'אין תיאור לקבוצה.'
                 }
             </p>
-
 
             <div class="group-details">
 
@@ -310,7 +342,6 @@ function renderGroups() {
                 </span>
 
             </div>
-
 
             <div class="group-actions">
                 ${actionButtons}
@@ -515,6 +546,13 @@ async function leaveGroup(groupId) {
             );
         }
 
+        if (
+            String(selectedGroupId) ===
+            String(groupId)
+        ) {
+            closeGroupPosts();
+        }
+
         await loadGroups();
 
     } catch (error) {
@@ -523,6 +561,294 @@ async function leaveGroup(groupId) {
             error.message
         );
     }
+}
+
+
+// ========================================
+// GROUP POSTS
+// ========================================
+
+async function openGroupPosts(groupId) {
+    if (!currentUserId) {
+        window.location.href =
+            '/login.html';
+
+        return;
+    }
+
+    const group =
+        allGroups.find(
+            item =>
+                String(item._id) ===
+                String(groupId)
+        );
+
+    if (!group) {
+        return;
+    }
+
+    selectedGroupId =
+        String(groupId);
+
+    document.getElementById(
+        'groupPostsTitle'
+    ).textContent =
+        `פוסטים בקבוצה: ${group.name}`;
+
+    document.getElementById(
+        'groupPostMessage'
+    ).textContent = '';
+
+    const section =
+        document.getElementById(
+            'groupPostsSection'
+        );
+
+    section.classList.remove(
+        'hidden'
+    );
+
+    await loadGroupPosts();
+
+    section.scrollIntoView({
+        behavior: 'smooth'
+    });
+}
+
+
+async function loadGroupPosts() {
+    if (!selectedGroupId) {
+        return;
+    }
+
+    const status =
+        document.getElementById(
+            'groupPostsStatus'
+        );
+
+    const container =
+        document.getElementById(
+            'groupPostsContainer'
+        );
+
+    status.textContent =
+        'טוען פוסטים...';
+
+    container.innerHTML = '';
+
+    try {
+        const response =
+            await fetch(
+                `/groups/${selectedGroupId}/posts`,
+                {
+                    credentials:
+                        'include'
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                'Failed to load group posts'
+            );
+        }
+
+        status.textContent = '';
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+            container.innerHTML = `
+                <div class="empty-groups">
+                    עדיין אין פוסטים בקבוצה.
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            data
+                .map(post => {
+                    const author =
+                        post.author?.username ||
+                        'משתמש לא ידוע';
+
+                    return `
+                        <article class="group-post-card">
+
+                            <h4>
+                                ${escapeHtml(post.title)}
+                            </h4>
+
+                            <p>
+                                ${escapeHtml(post.content)}
+                            </p>
+
+                            <div class="group-post-meta">
+
+                                <span>
+                                    ${escapeHtml(author)}
+                                </span>
+
+                                <span>
+                                    ${formatDate(post.createdAt)}
+                                </span>
+
+                            </div>
+
+                        </article>
+                    `;
+                })
+                .join('');
+
+    } catch (error) {
+        console.error(
+            'Error loading group posts:',
+            error
+        );
+
+        status.textContent =
+            'שגיאה בטעינת פוסטי הקבוצה.';
+    }
+}
+
+
+async function createGroupPost(event) {
+    event.preventDefault();
+
+    if (
+        !currentUserId ||
+        !selectedGroupId
+    ) {
+        return;
+    }
+
+    const title =
+        document.getElementById(
+            'groupPostTitle'
+        ).value.trim();
+
+    const content =
+        document.getElementById(
+            'groupPostContent'
+        ).value.trim();
+
+    const message =
+        document.getElementById(
+            'groupPostMessage'
+        );
+
+
+    if (!title || !content) {
+        message.textContent =
+            'יש להזין כותרת ותוכן.';
+
+        message.className =
+            'groups-message error';
+
+        return;
+    }
+
+
+    try {
+        const response =
+            await fetch(
+                `/groups/${selectedGroupId}/posts`,
+                {
+                    method: 'POST',
+
+                    credentials:
+                        'include',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            title,
+                            content,
+
+                            // כרגע Text בלבד.
+                            // מוריה מטפלת ב-Post Types.
+                            postType: 'text'
+                        })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                'Failed to create group post'
+            );
+        }
+
+        document
+            .getElementById(
+                'groupPostForm'
+            )
+            .reset();
+
+        message.textContent =
+            'הפוסט פורסם בקבוצה בהצלחה.';
+
+        message.className =
+            'groups-message success';
+
+        await loadGroupPosts();
+
+    } catch (error) {
+        console.error(
+            'Error creating group post:',
+            error
+        );
+
+        message.textContent =
+            error.message;
+
+        message.className =
+            'groups-message error';
+    }
+}
+
+
+function closeGroupPosts() {
+    selectedGroupId = null;
+
+    document
+        .getElementById(
+            'groupPostForm'
+        )
+        .reset();
+
+    document
+        .getElementById(
+            'groupPostsSection'
+        )
+        .classList.add(
+            'hidden'
+        );
+
+    document.getElementById(
+        'groupPostMessage'
+    ).textContent = '';
+
+    document.getElementById(
+        'groupPostsStatus'
+    ).textContent = '';
+
+    document.getElementById(
+        'groupPostsContainer'
+    ).innerHTML = '';
 }
 
 
@@ -714,6 +1040,13 @@ async function deleteGroup(groupId) {
             );
         }
 
+        if (
+            String(selectedGroupId) ===
+            String(groupId)
+        ) {
+            closeGroupPosts();
+        }
+
         await loadGroups();
 
     } catch (error) {
@@ -779,6 +1112,10 @@ function handleGroupAction(event) {
         leaveGroup(groupId);
     }
 
+    if (action === 'posts') {
+        openGroupPosts(groupId);
+    }
+
     if (action === 'edit') {
         startEditGroup(groupId);
     }
@@ -797,8 +1134,6 @@ document.addEventListener(
     'DOMContentLoaded',
     async () => {
 
-        // בודקים אם יש משתמש מחובר,
-        // אבל לא חוסמים את טעינת העמוד
         await loadCurrentUser();
 
 
@@ -852,7 +1187,26 @@ document.addEventListener(
             );
 
 
-        // הקבוצות נטענות גם בלי Login
+        document
+            .getElementById(
+                'groupPostForm'
+            )
+            .addEventListener(
+                'submit',
+                createGroupPost
+            );
+
+
+        document
+            .getElementById(
+                'closeGroupPostsBtn'
+            )
+            .addEventListener(
+                'click',
+                closeGroupPosts
+            );
+
+
         await loadGroups();
     }
 );

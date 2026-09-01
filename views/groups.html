@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Israeli Trips - קבוצות</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/StyleSheet1.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/groups.css"
+    >
+
+    <script
+        src="/js/groups.js"
+        defer>
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                Israeli Trips
+            </div>
+
+            <div class="nav-links">
+    <a href="homePage.html">בית</a>
+    <a href="trips.html">טיולים</a>
+    <a href="groups.html">קבוצות</a>
+    <a href="tips.html">טיפים</a>
+    <a href="analytics.html">סטטיסטיקות</a>
+    <a href="login.html">התחברות</a>
+    <a href="register.html">הרשמה</a>
+</div>
+
+        </nav>
+    </header>
+
+
+    <main class="groups-page">
+
+        <section class="groups-header">
+
+            <h1>
+                קבוצות מטיילים
+            </h1>
+
+            <p>
+                צרו קבוצה חדשה, הצטרפו לקבוצות קיימות
+                והכירו מטיילים מכל הארץ.
+            </p>
+
+        </section>
+
+
+        <!-- יצירת קבוצה -->
+        <section class="group-form-card">
+
+            <h2>
+                יצירת קבוצה חדשה
+            </h2>
+
+            <form id="createGroupForm">
+
+                <div class="group-form-grid">
+
+                    <div class="form-field">
+                        <label for="groupName">
+                            שם הקבוצה
+                        </label>
+
+                        <input
+                            type="text"
+                            id="groupName"
+                            maxlength="80"
+                            required
+                            placeholder="לדוגמה: מטיילים בצפון"
+                        >
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="groupRegion">
+                            אזור
+                        </label>
+
+                        <select
+                            id="groupRegion"
+                            required
+                        >
+                            <option value="">
+                                בחרו אזור
+                            </option>
+
+                            <option value="צפון">
+                                צפון
+                            </option>
+
+                            <option value="מרכז">
+                                מרכז
+                            </option>
+
+                            <option value="דרום">
+                                דרום
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-field full-width">
+
+                        <label for="groupDescription">
+                            תיאור הקבוצה
+                        </label>
+
+                        <textarea
+                            id="groupDescription"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="ספרו בקצרה על הקבוצה..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary group-submit-btn"
+                >
+                    צור קבוצה
+                </button>
+
+                <p
+                    id="groupFormMessage"
+                    class="groups-message"
+                ></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- עריכת קבוצה -->
+        <section
+            id="editGroupSection"
+            class="group-form-card hidden"
+        >
+
+            <h2>
+                עריכת קבוצה
+            </h2>
+
+            <form id="editGroupForm">
+
+                <input
+                    type="hidden"
+                    id="editGroupId"
+                >
+
+
+                <div class="group-form-grid">
+
+                    <div class="form-field">
+
+                        <label for="editGroupName">
+                            שם הקבוצה
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editGroupName"
+                            maxlength="80"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="editGroupRegion">
+                            אזור
+                        </label>
+
+                        <select
+                            id="editGroupRegion"
+                            required
+                        >
+                            <option value="צפון">
+                                צפון
+                            </option>
+
+                            <option value="מרכז">
+                                מרכז
+                            </option>
+
+                            <option value="דרום">
+                                דרום
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-field full-width">
+
+                        <label for="editGroupDescription">
+                            תיאור
+                        </label>
+
+                        <textarea
+                            id="editGroupDescription"
+                            rows="4"
+                            maxlength="500"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="edit-actions">
+
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                    >
+                        שמור שינויים
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelEditGroup"
+                        class="btn-secondary"
+                    >
+                        ביטול
+                    </button>
+
+                </div>
+
+                <p
+                    id="editGroupMessage"
+                    class="groups-message"
+                ></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- רשימת קבוצות -->
+        <section class="groups-list-section">
+
+            <div class="groups-list-title">
+
+                <h2>
+                    כל הקבוצות
+                </h2>
+
+                <button
+                    type="button"
+                    id="refreshGroupsBtn"
+                    class="btn-secondary"
+                >
+                    רענון
+                </button>
+
+            </div>
+
+
+            <p
+                id="groupsStatus"
+                class="groups-status"
+            >
+                טוען קבוצות...
+            </p>
+
+
+            <div
+                id="groupsContainer"
+                class="groups-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>
+            &copy; Israeli Trips - כל הזכויות שמורות
+        </p>
+    </footer>
+
+</body>
+
+</html>

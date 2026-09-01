@@ -1,45 +1,102 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Israeli Trips - התחברות</title>
+
     <link rel="stylesheet" href="/css/StyleSheet1.css">
     <link rel="stylesheet" href="/css/login.css">
+
     <script src="/js/login.js" defer></script>
 </head>
+
 <body>
+
     <nav class="navbar">
         <div class="logo">Israeli Trips</div>
+
         <div class="nav-links">
             <a href="homePage.html">בית</a>
             <a href="trips.html">טיולים</a>
             <a href="tips.html">טיפים</a>
+            <a href="analytics.html">סטטיסטיקות</a>
             <a href="login.html">התחברות</a>
             <a href="register.html">הרשמה</a>
         </div>
     </nav>
 
+
     <main class="main-container">
+
         <div class="form-card">
+
             <h2>התחברות לחשבון</h2>
-            <form id="loginForm" novalidate>
-                <div class="form-group">
-                    <label for="email">אימייל:</label>
-                    <input type="email" id="email" name="email" required placeholder="example@email.com">
-                    <span class="error-message" id="emailError"></span>
-                </div>
+
+            <form id="loginForm">
 
                 <div class="form-group">
-                    <label for="password">סיסמה:</label>
-                    <input type="password" id="password" name="password" required placeholder="הכנס סיסמה">
-                    <span class="error-message" id="passwordError"></span>
+                    <label for="username">
+                        שם משתמש:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        required
+                        autocomplete="username"
+                        placeholder="הכנס שם משתמש">
+
+                    <span
+                        class="error-message"
+                        id="usernameError">
+                    </span>
                 </div>
 
-                <button type="submit" class="submit-btn">התחבר</button>
+
+                <div class="form-group">
+                    <label for="password">
+                        סיסמה:
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="הכנס סיסמה">
+
+                    <span
+                        class="error-message"
+                        id="passwordError">
+                    </span>
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="loginBtn">
+                    התחבר
+                </button>
+
             </form>
-            <p class="form-footer">עוד לא נרשמת? <a href="register.html">להרשמה לחץ כאן</a></p>
+
+
+            <p class="form-footer">
+                עוד לא נרשמת?
+                <a href="register.html">
+                    להרשמה לחץ כאן
+                </a>
+            </p>
+
         </div>
+
     </main>
+
 </body>
 </html>

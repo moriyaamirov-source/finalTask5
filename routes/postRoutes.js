@@ -3,30 +3,87 @@ const express = require('express');
 const router = express.Router();
 
 const postController = require('../controllers/postController');
+const { requireAuth } = require('../middleware/authMiddleware');
 
+
+// ==============================
+// SEARCHES
+// ==============================
 
 // חיפוש מתקדם - דרישה 23
-router.get('/search/advanced', postController.advancedSearchPosts);
+router.get(
+    '/search/advanced',
+    postController.advancedSearchPosts
+);
+
+// חיפוש נוסף - דרישה 23
+router.get(
+    '/search/filter',
+    postController.filterPosts
+);
 
 
-// GroupBy - דרישה 24
-router.get('/stats/type', postController.getPostsStatsByType);
+// ==============================
+// GROUP BY
+// ==============================
 
-router.get('/stats/date', postController.getPostsStatsByDate);
+router.get(
+    '/stats/type',
+    postController.getPostsStatsByType
+);
+
+router.get(
+    '/stats/date',
+    postController.getPostsStatsByDate
+);
 
 
-// נתיבי CRUD
-router.post('/', postController.createPost);
+// ==============================
+// X / Twitter API
+// ==============================
 
-router.get('/', postController.getPosts);
+router.post(
+    '/share-x',
+    postController.shareToX
+);
 
-router.put('/:id', postController.updatePost);
 
-router.delete('/:id', postController.deletePost);
+// ==============================
+// CRUD
+// ==============================
 
+// CREATE - רק משתמש מחובר
+router.post(
+    '/',
+    requireAuth,
+    postController.createPost
+);
 
-// פרסום פוסט ל-X באמצעות X API
-router.post('/share-x', postController.shareToX);
+// READ ALL
+router.get(
+    '/',
+    postController.getPosts
+);
+
+// READ BY ID
+router.get(
+    '/:id',
+    postController.getPostById
+);
+
+// UPDATE - רק משתמש מחובר
+router.put(
+    '/:id',
+    requireAuth,
+    postController.updatePost
+);
+
+// DELETE - רק משתמש מחובר
+router.delete(
+    '/:id',
+    requireAuth,
+    postController.deletePost
+);
 
 
 module.exports = router;

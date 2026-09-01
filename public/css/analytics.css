@@ -1,0 +1,201 @@
+/* ========================================
+   Analytics Page
+   ======================================== */
+
+.analytics-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 50px;
+}
+
+
+/* כותרת ראשית */
+
+.analytics-page > h1 {
+    text-align: center;
+    color: var(--primary-color, #2e7d32);
+
+    font-size: 32px;
+
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    text-shadow:
+        1px 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+
+.analytics-description {
+    max-width: 750px;
+
+    margin: 0 auto 35px;
+
+    text-align: center;
+
+    color: #555;
+
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+
+/* ========================================
+   Chart Cards
+   ======================================== */
+
+.chart-container {
+    max-width: 850px;
+
+    margin: 0 auto 35px;
+
+    padding: 25px;
+
+    background-color:
+        var(--card-bg, #ffffff);
+
+    border-radius:
+        var(--border-radius, 10px);
+
+    border-top:
+        4px solid
+        var(--primary-color, #2e7d32);
+
+    box-shadow:
+        var(
+            --box-shadow,
+            0 4px 12px rgba(0, 0, 0, 0.08)
+        );
+
+    text-align: center;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.chart-container:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(0, 0, 0, 0.12);
+}
+
+
+/* כותרת של כל גרף */
+
+.chart-container h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+
+    color:
+        var(--primary-hover, #1b5e20);
+
+    font-size: 22px;
+}
+
+
+.chart-description {
+    color: #666;
+
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   D3 SVG
+   ======================================== */
+
+.chart-container svg {
+    display: block;
+
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    background-color: #ffffff;
+
+    border-radius: 8px;
+}
+
+
+/* גרף העמודות */
+
+#barChart rect {
+    transition:
+        opacity 0.2s ease;
+}
+
+
+#barChart rect:hover {
+    opacity: 0.7;
+}
+
+
+/* גרף העוגה */
+
+#pieChart path {
+    stroke: #ffffff;
+    stroke-width: 2px;
+
+    transition:
+        opacity 0.2s ease;
+}
+
+
+#pieChart path:hover {
+    opacity: 0.75;
+}
+
+
+/* טקסט D3 */
+
+#barChart text,
+#pieChart text {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+
+    .analytics-page {
+        padding:
+            20px 12px 40px;
+    }
+
+
+    .analytics-page > h1 {
+        font-size: 26px;
+    }
+
+
+    .analytics-description {
+        font-size: 15px;
+    }
+
+
+    .chart-container {
+        padding: 15px;
+    }
+
+
+    .chart-container h2 {
+        font-size: 19px;
+    }
+
+
+    #barChart,
+    #pieChart {
+        width: 100%;
+        height: auto;
+    }
+}

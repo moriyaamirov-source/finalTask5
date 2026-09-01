@@ -1,0 +1,8 @@
+body { font-family: Arial, sans-serif; margin: 20px; direction: rtl; background: #f9f9f9; }
+.box { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc; }
+form { display: flex; gap: 10px; margin-bottom: 10px; }
+input, select, button { padding: 8px; }
+button { cursor: pointer; background: #007bff; color: white; border: none; }
+.post { background: #eee; padding: 10px; margin-top: 8px; border-radius: 4px; }
+.error { color: red; }
+.empty { color: orange; }

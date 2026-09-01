@@ -1,61 +1,243 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>ביקורות של מטיילים</title>
-    <link rel="stylesheet" href="/css/posts.css">
+
+    <!-- עיצוב כללי של האתר -->
+    <link
+        rel="stylesheet"
+        href="/css/StyleSheet1.css"
+    >
+
+    <!-- עיצוב ייחודי לעמוד הפוסטים -->
+    <link
+        rel="stylesheet"
+        href="/css/posts.css"
+    >
+
+    <!-- התנתקות -->
+    <script
+        src="/js/logout.js?v=1"
+        defer
+    ></script>
 </head>
+
 <body>
 
-    <header class="page-header">
-        <h1>ביקורות וחוויות של מטיילים</h1>
-        <p>שתפו את החוויות שלכם מהטיולים בארץ, העלו תמונות וסרטונים!</p>
+    <header>
+
+        <nav class="navbar">
+
+            <div class="logo">
+                Israeli Trips
+            </div>
+
+            <div class="nav-links">
+
+                <a href="/homePage.html">
+                    בית
+                </a>
+
+                <a href="/trips.html">
+                    טיולים
+                </a>
+
+                <a href="/posts.html">
+                    פוסטים
+                </a>
+
+                <a href="/groups.html">
+                    קבוצות
+                </a>
+
+                <a href="/feed.html">
+                    פיד
+                </a>
+
+                <a href="/friends.html">
+                    חברים
+                </a>
+
+                <a href="/search.html">
+                    חיפוש
+                </a>
+
+                <a href="/profile.html">
+                    פרופיל
+                </a>
+
+                <a href="/tips.html">
+                    טיפים
+                </a>
+
+                <a href="/analytics.html">
+                    סטטיסטיקות
+                </a>
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                >
+                    התנתקות
+                </button>
+
+            </div>
+
+        </nav>
+
     </header>
 
+
+    <header class="page-header">
+
+        <h1>
+            ביקורות וחוויות של מטיילים
+        </h1>
+
+        <p>
+            שתפו את החוויות שלכם מהטיולים בארץ,
+            העלו תמונות וסרטונים!
+        </p>
+
+    </header>
+
+
     <main class="container">
+
         <!-- טופס הוספת ביקורת -->
         <section class="form-section">
-            <h2>הוספת ביקורת חדשה</h2>
+
+            <h2>
+                הוספת ביקורת חדשה
+            </h2>
+
             <form id="createPostForm">
-                <div class="form-group">
-                    <label for="postTitle">כותרת הביקורת / המקום:</label>
-                    <input type="text" id="postTitle" placeholder="למשל: טיול מדהים בנחל שניר" required />
-                </div>
 
                 <div class="form-group">
-                    <label for="postType">סוג המדיה / פוסט:</label>
+
+                    <label for="postTitle">
+                        כותרת הביקורת / המקום:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="postTitle"
+                        placeholder="למשל: טיול מדהים בנחל שניר"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="postType">
+                        סוג המדיה / פוסט:
+                    </label>
+
                     <select id="postType">
-                        <option value="text">פוסט טקסט בלבד</option>
-                        <option value="image">פוסט עם תמונה</option>
-                        <option value="video">פוסט עם וידאו (HTML5 Video)</option>
+
+                        <option value="text">
+                            פוסט טקסט בלבד
+                        </option>
+
+                        <option value="image">
+                            פוסט עם תמונה
+                        </option>
+
+                        <option value="video">
+                            פוסט עם וידאו (HTML5 Video)
+                        </option>
+
                     </select>
+
                 </div>
 
-                <!-- שדה מדיה - מוסתר כברירת מחדל בפוסט טקסט -->
-                <div class="form-group" id="mediaUrlGroup" style="display: none;">
-                    <label for="postMediaUrl" id="mediaUrlLabel">קישור לתמונה:</label>
-                    <input type="url" id="postMediaUrl" placeholder="https://example.com/media.jpg" />
+
+                <!-- שדה מדיה -->
+                <div
+                    class="form-group"
+                    id="mediaUrlGroup"
+                    style="display: none;"
+                >
+
+                    <label
+                        for="postMediaUrl"
+                        id="mediaUrlLabel"
+                    >
+                        קישור לתמונה:
+                    </label>
+
+                    <input
+                        type="url"
+                        id="postMediaUrl"
+                        placeholder="https://example.com/media.jpg"
+                    >
+
                 </div>
+
 
                 <div class="form-group">
-                    <label for="postContent">תוכן הביקורת:</label>
-                    <textarea id="postContent" rows="4" placeholder="ספרו לנו איך היה, המלצות, טיפים..." required></textarea>
+
+                    <label for="postContent">
+                        תוכן הביקורת:
+                    </label>
+
+                    <textarea
+                        id="postContent"
+                        rows="4"
+                        placeholder="ספרו לנו איך היה, המלצות, טיפים..."
+                        required
+                    ></textarea>
+
                 </div>
 
-                <button type="submit" class="btn-submit">פרסם ביקורת</button>
+
+                <button
+                    type="submit"
+                    class="btn-submit"
+                >
+                    פרסם ביקורת
+                </button>
+
             </form>
+
         </section>
 
-        <!-- אזור הצגת הפוסטים מ-MongoDB -->
+
+        <!-- הצגת הפוסטים מ-MongoDB -->
         <section class="feed-section">
-            <h2>חוויות מהשטח</h2>
-            <div id="postsContainer" class="posts-list">
-                <p class="loading">טוען ביקורות מהשרת...</p>
+
+            <h2>
+                חוויות מהשטח
+            </h2>
+
+            <div
+                id="postsContainer"
+                class="posts-list"
+            >
+
+                <p class="loading">
+                    טוען ביקורות מהשרת...
+                </p>
+
             </div>
+
         </section>
+
     </main>
 
+
     <script src="/js/posts.js"></script>
+
 </body>
+
 </html>

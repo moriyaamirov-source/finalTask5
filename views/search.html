@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>חיפוש פוסטים</title>
+  <link rel="stylesheet" href="/css/search.css">
+</head>
+<body>
+  <h1>חיפוש פוסטים</h1>
+
+  <!-- חיפוש 1: מתקדם -->
+  <section class="box">
+    <h2>חיפוש מתקדם</h2>
+    <form id="advForm">
+      <input type="text" name="q" placeholder="טקסט">
+      <input type="text" name="author" placeholder="מחבר">
+      <select name="category">
+        <option value="">כל הקטגוריות</option>
+        <option value="hiking">טיולים</option>
+        <option value="camping">קמפינג</option>
+      </select>
+      <button type="submit">חפש</button>
+    </form>
+    <div id="advStatus"></div>
+    <div id="advResults"></div>
+  </section>
+
+  <!-- חיפוש 2: סינון -->
+  <section class="box">
+    <h2>סינון פוסטים</h2>
+    <form id="filterForm">
+      <input type="text" name="location" placeholder="מיקום">
+      <input type="text" name="tags" placeholder="תגיות">
+      <input type="number" name="limit" value="10" placeholder="כמות">
+      <button type="submit">סנן</button>
+    </form>
+    <div id="filterStatus"></div>
+    <div id="filterResults"></div>
+  </section>
+
+  <script src="/js/search.js"></script>
+</body>
+</html>

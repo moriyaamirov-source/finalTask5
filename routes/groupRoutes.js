@@ -6,6 +6,7 @@ const groupController = require('../controllers/groupController');
 
 const { requireAuth } = require('../middleware/authMiddleware');
 
+const groupPostController = require('../controllers/groupPostController');
 
 // ========================================
 // CREATE
@@ -54,6 +55,20 @@ router.post(
 // READ BY ID
 // פתוח גם בלי Login
 // ========================================
+
+router.post(
+    '/:id/posts',
+    requireAuth,
+    groupPostController.createGroupPost
+);
+
+router.get(
+    '/:id/posts',
+    requireAuth,
+    groupPostController.getGroupPosts
+);
+
+
 router.get(
     '/:id',
     groupController.getGroupById

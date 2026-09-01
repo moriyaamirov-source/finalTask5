@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>הפרופיל שלי | Israeli Trips</title>
+
+    <link rel="stylesheet" href="/css/StyleSheet1.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
+    <script src="/js/profile.js?v=1" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">Israeli Trips</div>
+
+            <div class="nav-links">
+                <a href="/homePage.html">בית</a>
+                <a href="/trips.html">טיולים</a>
+                <a href="/groups.html">קבוצות</a>
+                <a href="/feed.html">פיד</a>
+                <a href="/friends.html">חברים</a>
+                <a href="/profile.html">פרופיל</a>
+                <a href="/tips.html">טיפים</a>
+                <a href="/analytics.html">סטטיסטיקות</a>
+            </div>
+        </nav>
+    </header>
+
+
+    <main class="profile-page">
+
+        <section class="profile-card">
+
+            <h1>הפרופיל שלי</h1>
+
+            <p id="profileStatus"></p>
+
+            <form id="profileForm">
+
+                <label for="username">
+                    שם משתמש
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    שמירת שינויים
+                </button>
+
+            </form>
+
+            <div class="danger-zone">
+
+                <h2>מחיקת חשבון</h2>
+
+                <p>
+                    פעולה זו תמחק את המשתמש שלך מהמערכת.
+                </p>
+
+                <button
+                    id="deleteAccountBtn"
+                    type="button"
+                    class="delete-button"
+                >
+                    מחיקת חשבון
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="my-posts-section">
+
+            <h2>הפוסטים שלי</h2>
+
+            <p id="postsStatus"></p>
+
+            <div
+                id="postsContainer"
+                class="posts-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Israeli Trips</p>
+    </footer>
+
+</body>
+
+</html>

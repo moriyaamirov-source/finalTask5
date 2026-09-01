@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>חברים | Israeli Trips</title>
+
+    <link rel="stylesheet" href="/css/StyleSheet1.css">
+    <link rel="stylesheet" href="/css/friends.css">
+
+    <script src="/js/friends.js?v=1" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                Israeli Trips
+            </div>
+
+            <div class="nav-links">
+                <a href="/homePage.html">בית</a>
+                <a href="/trips.html">טיולים</a>
+                <a href="/groups.html">קבוצות</a>
+                <a href="/feed.html">פיד</a>
+                <a href="/friends.html">חברים</a>
+                <a href="/tips.html">טיפים</a>
+                <a href="/analytics.html">סטטיסטיקות</a>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <main class="friends-page">
+
+        <section class="friends-header">
+
+            <div>
+                <h1>חברים</h1>
+                <p>
+                    הוסיפי משתמשים כחברים כדי לראות את הפוסטים שלהם בפיד שלך
+                </p>
+            </div>
+
+            <button
+                id="refreshFriendsBtn"
+                type="button"
+                class="friends-button"
+            >
+                רענון
+            </button>
+
+        </section>
+
+
+        <section class="friends-section">
+
+            <h2>החברים שלי</h2>
+
+            <div
+                id="myFriendsStatus"
+                class="status-message"
+            ></div>
+
+            <div
+                id="myFriendsContainer"
+                class="users-grid"
+            ></div>
+
+        </section>
+
+
+        <section class="friends-section">
+
+            <h2>משתמשים נוספים</h2>
+
+            <div
+                id="usersStatus"
+                class="status-message"
+            ></div>
+
+            <div
+                id="usersContainer"
+                class="users-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Israeli Trips</p>
+    </footer>
+
+</body>
+
+</html>

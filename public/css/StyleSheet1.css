@@ -41,23 +41,33 @@ body {
 
 .nav-links {
     display: flex;
+    align-items: center;
     gap: 20px;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-links button {
     text-decoration: none;
     color: #ffffff;
     font-weight: 600;
     padding: 6px 14px;
     border-radius: 6px;
 
-    /* CSS3 - Transition */
     transition: background-color 0.2s, color 0.2s;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links button:hover {
     color: #ffffff;
     background-color: var(--primary-hover);
+}
+
+.nav-links button {
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
 }
 
 /* מיכל מרכזי */

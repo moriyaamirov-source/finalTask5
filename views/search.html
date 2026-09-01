@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>חיפוש פוסטים | Israeli Trips</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/StyleSheet1.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/search.css"
+    >
+
+    <script
+        src="/js/search.js?v=2"
+        defer
+    ></script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                Israeli Trips
+            </div>
+
+            <div class="nav-links">
+                <a href="/homePage.html">בית</a>
+                <a href="/trips.html">טיולים</a>
+                <a href="/groups.html">קבוצות</a>
+                <a href="/feed.html">פיד</a>
+                <a href="/friends.html">חברים</a>
+                <a href="/profile.html">פרופיל</a>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <main class="search-page">
+
+        <section class="search-header">
+
+            <h1>
+                חיפוש פוסטים
+            </h1>
+
+            <p>
+                חפשו פוסטים לפי מספר קריטריונים.
+            </p>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- חיפוש 1 -->
+        <!-- keyword + postType + startDate -->
+        <!-- ================================= -->
+
+        <section class="box">
+
+            <h2>
+                חיפוש מתקדם
+            </h2>
+
+            <p>
+                חיפוש לפי מילת מפתח, סוג פוסט ותאריך התחלה.
+            </p>
+
+            <form id="advForm">
+
+                <input
+                    type="text"
+                    name="keyword"
+                    placeholder="מילת מפתח"
+                >
+
+
+                <select name="postType">
+
+                    <option value="">
+                        כל סוגי הפוסטים
+                    </option>
+
+                    <option value="text">
+                        טקסט
+                    </option>
+
+                    <option value="image">
+                        תמונה
+                    </option>
+
+                    <option value="video">
+                        וידאו
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="date"
+                    name="startDate"
+                >
+
+
+                <button type="submit">
+                    חפש
+                </button>
+
+            </form>
+
+
+            <div id="advStatus"></div>
+
+            <div id="advResults"></div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- חיפוש 2 -->
+        <!-- title + endDate + hasMedia -->
+        <!-- ================================= -->
+
+        <section class="box">
+
+            <h2>
+                סינון פוסטים
+            </h2>
+
+            <p>
+                סינון לפי כותרת, תאריך סיום והאם קיימת מדיה.
+            </p>
+
+            <form id="filterForm">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="כותרת"
+                >
+
+
+                <input
+                    type="date"
+                    name="endDate"
+                >
+
+
+                <select name="hasMedia">
+
+                    <option value="">
+                        עם או בלי מדיה
+                    </option>
+
+                    <option value="true">
+                        עם מדיה
+                    </option>
+
+                    <option value="false">
+                        ללא מדיה
+                    </option>
+
+                </select>
+
+
+                <button type="submit">
+                    סנן
+                </button>
+
+            </form>
+
+
+            <div id="filterStatus"></div>
+
+            <div id="filterResults"></div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>
+            &copy; Israeli Trips - כל הזכויות שמורות
+        </p>
+    </footer>
+
+</body>
+
+</html>

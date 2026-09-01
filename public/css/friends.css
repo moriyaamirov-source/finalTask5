@@ -1,0 +1,196 @@
+.friends-page {
+    width: min(1100px, 92%);
+    margin: 40px auto 80px;
+}
+
+.friends-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 28px;
+    margin-bottom: 35px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.08);
+}
+
+.friends-header h1 {
+    margin: 0 0 8px;
+}
+
+.friends-header p {
+    margin: 0;
+    color: #666;
+}
+
+.friends-section {
+    margin-bottom: 45px;
+}
+
+.friends-section h2 {
+    margin-bottom: 20px;
+}
+
+.users-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px, 1fr)
+        );
+
+    gap: 18px;
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(0, 0, 0, 0.11);
+}
+
+.user-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #eef4ee;
+
+    font-size: 1.4rem;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info h3 {
+    margin: 0 0 5px;
+
+    font-size: 1rem;
+
+    word-break: break-word;
+}
+
+.friend-state {
+    font-size: 0.85rem;
+
+    color: #777;
+}
+
+.friend-action-button,
+.friends-button {
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.friend-action-button:hover,
+.friends-button:hover {
+    transform: translateY(-1px);
+}
+
+.friend-action-button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.add-friend {
+    background: #e7f3e7;
+}
+
+.remove-friend {
+    background: #f7e6e6;
+}
+
+.status-message {
+    margin-bottom: 15px;
+
+    font-weight: 600;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    text-align: center;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.06);
+}
+
+.empty-state h3 {
+    margin-top: 0;
+}
+
+.empty-state p {
+    margin-bottom: 0;
+
+    color: #666;
+}
+
+
+@media (max-width: 650px) {
+
+    .friends-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .user-card {
+        flex-wrap: wrap;
+    }
+
+    .friend-action-button {
+        width: 100%;
+    }
+}

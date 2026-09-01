@@ -59,7 +59,6 @@ mongoose.connect(MONGO_URI)
 
 // ==============================
 // Google Maps Key
-// שימי לב: זה לפני apiRoutes
 // ==============================
 
 app.get('/api/maps-key', (req, res) => {
@@ -100,7 +99,6 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/groups', groupRoutes);
 app.use('/posts', postRoutes);
-
 app.use('/api', apiRoutes);
 
 

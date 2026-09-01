@@ -1,111 +1,347 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>סטטיסטיקות ניתוח נתונים</title>
-    <!-- טעינת ספריית D3.js -->
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Israeli Trips - סטטיסטיקות</title>
+
+    <!-- העיצוב הכללי של האתר -->
+    <link
+        rel="stylesheet"
+        href="/css/StyleSheet1.css"
+    >
+
+    <!-- עיצוב עמוד הסטטיסטיקות -->
+    <link
+        rel="stylesheet"
+        href="/css/analytics.css"
+    >
+
+    <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-        .chart-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .bar {
-            fill: steelblue;
-        }
-        .bar:hover {
-            fill: orange;
-        }
-        .axis text {
-            font-size: 12px;
-        }
-    </style>
 </head>
+
 <body>
-    <h1>ניתוח נתוני פוסטים ברשת הטיולים</h1>
 
-    <!-- גרף 1: התפלגות לפי קטגוריות -->
-    <div class="chart-container">
-        <h2>פוסטים לפי קטגוריית טיול (גרף עמודות)</h2>
-        <svg id="barChart" width="600" height="300"></svg>
-    </div>
+    <!-- תפריט עליון -->
+    <nav class="navbar">
+        <div class="logo">
+            Israeli Trips
+        </div>
 
-    <!-- גרף 2: התפלגות חודשית -->
-    <div class="chart-container">
-        <h2>כמות פוסטים לפי חודשים (גרף עוגה)</h2>
-        <svg id="pieChart" width="400" height="400"></svg>
-    </div>
+        <div class="nav-links">
+            <a href="homePage.html">בית</a>
+            <a href="trips.html">טיולים</a>
+            <a href="tips.html">טיפים</a>
+            <a href="analytics.html">סטטיסטיקות</a>
+            <a href="login.html">התחברות</a>
+            <a href="register.html">הרשמה</a>
+        </div>
+    </nav>
+
+
+    <main class="analytics-page">
+
+        <h1>
+            ניתוח נתוני פוסטים ברשת הטיולים
+        </h1>
+
+        <p class="analytics-description">
+            כאן תוכלו לצפות בנתונים עדכניים על המסלולים
+            והפוסטים שנשמרו במערכת.
+        </p>
+
+
+        <!-- גרף 1 -->
+        <section class="chart-container">
+
+            <h2>
+                כמות מסלולים לפי אזור בארץ
+            </h2>
+
+            <p class="chart-description">
+                הגרף מציג את מספר המסלולים הקיימים
+                בצפון, במרכז ובדרום.
+            </p>
+
+            <svg
+                id="barChart"
+                width="600"
+                height="300">
+            </svg>
+
+        </section>
+
+
+        <!-- גרף 2 -->
+        <section class="chart-container">
+
+            <h2>
+                כמות פוסטים לפי חודשים
+            </h2>
+
+            <p class="chart-description">
+                הגרף מציג את התפלגות הפוסטים
+                לפי חודש היצירה שלהם.
+            </p>
+
+            <svg
+                id="pieChart"
+                width="400"
+                height="400">
+            </svg>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>
+            &copy; Israeli Trips - כל הזכויות שמורות
+        </p>
+    </footer>
+
 
     <script>
-        // שליפת נתונים לגרף עמודות - קטגוריות
-        d3.json('/api/analytics/categories').then(data => {
-            const svg = d3.select("#barChart"),
-                  margin = {top: 20, right: 30, bottom: 40, left: 40},
-                  width = +svg.attr("width") - margin.left - margin.right,
-                  height = +svg.attr("height") - margin.top - margin.bottom;
 
-            const x = d3.scaleBand()
-                .domain(data.map(d => d.category))
-                .range([margin.left, width - margin.right])
-                .padding(0.1);
+        // ========================================
+        // גרף עמודות - מסלולים לפי אזור
+        // ========================================
 
-            const y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.count)]).nice()
-                .range([height - margin.bottom, margin.top]);
+        d3.json('/api/analytics/categories')
+            .then(data => {
 
-            svg.append("g")
-               .attr("fill", "steelblue")
-               .selectAll("rect")
-               .data(data)
-               .join("rect")
-                 .attr("x", d => x(d.category))
-                 .attr("y", d => y(d.count))
-                 .attr("height", d => y(0) - y(d.count))
-                 .attr("width", x.bandwidth());
+                const svg =
+                    d3.select("#barChart");
 
-            svg.append("g")
-               .attr("transform", `translate(0,${height - margin.bottom})`)
-               .call(d3.axisBottom(x));
+                const margin = {
+                    top: 20,
+                    right: 30,
+                    bottom: 40,
+                    left: 40
+                };
 
-            svg.append("g")
-               .attr("transform", `translate(${margin.left},0)`)
-               .call(d3.axisLeft(y));
-        });
+                const width =
+                    +svg.attr("width")
+                    - margin.left
+                    - margin.right;
 
-        // שליפת נתונים לגרף עוגה - חודשים
-        d3.json('/api/analytics/monthly').then(data => {
-            const width = 400, height = 400, radius = Math.min(width, height) / 2;
-            const svg = d3.select("#pieChart")
-                .append("g")
-                .attr("transform", `translate(${width / 2},${height / 2})`);
+                const height =
+                    +svg.attr("height")
+                    - margin.top
+                    - margin.bottom;
 
-            const color = d3.scaleOrdinal(d3.schemeCategory10);
-            const pie = d3.pie().value(d => d.totalPosts);
-            const arc = d3.arc().innerRadius(0).outerRadius(radius - 20);
 
-            const arcs = svg.selectAll("arc")
-                .data(pie(data))
-                .enter()
-                .append("g");
+                const x =
+                    d3.scaleBand()
+                        .domain(
+                            data.map(
+                                d => d.category
+                            )
+                        )
+                        .range([
+                            margin.left,
+                            width - margin.right
+                        ])
+                        .padding(0.1);
 
-            arcs.append("path")
-                .attr("d", arc)
-                .attr("fill", d => color(d.data._id));
 
-            arcs.append("text")
-                .attr("transform", d => `translate(${arc.centroid(d)})`)
-                .attr("text-anchor", "middle")
-                .text(d => `חודש ${d.data._id}`);
-        });
+                const y =
+                    d3.scaleLinear()
+                        .domain([
+                            0,
+                            d3.max(
+                                data,
+                                d => d.count
+                            ) || 0
+                        ])
+                        .nice()
+                        .range([
+                            height - margin.bottom,
+                            margin.top
+                        ]);
+
+
+                svg.append("g")
+                    .attr(
+                        "fill",
+                        "#2e7d32"
+                    )
+                    .selectAll("rect")
+                    .data(data)
+                    .join("rect")
+                    .attr(
+                        "x",
+                        d => x(d.category)
+                    )
+                    .attr(
+                        "y",
+                        d => y(d.count)
+                    )
+                    .attr(
+                        "height",
+                        d =>
+                            y(0) - y(d.count)
+                    )
+                    .attr(
+                        "width",
+                        x.bandwidth()
+                    );
+
+
+                svg.append("g")
+                    .attr(
+                        "transform",
+                        `translate(
+                            0,
+                            ${height - margin.bottom}
+                        )`
+                    )
+                    .call(
+                        d3.axisBottom(x)
+                    );
+
+
+                svg.append("g")
+                    .attr(
+                        "transform",
+                        `translate(
+                            ${margin.left},
+                            0
+                        )`
+                    )
+                    .call(
+                        d3.axisLeft(y)
+                            .ticks(5)
+                            .tickFormat(
+                                d3.format("d")
+                            )
+                    );
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'Error loading category analytics:',
+                    error
+                );
+
+            });
+
+
+        // ========================================
+        // גרף עוגה - פוסטים לפי חודש
+        // ========================================
+
+        d3.json('/api/analytics/monthly')
+            .then(data => {
+
+                const width = 400;
+                const height = 400;
+
+                const radius =
+                    Math.min(
+                        width,
+                        height
+                    ) / 2;
+
+
+                const svg =
+                    d3.select("#pieChart")
+                        .append("g")
+                        .attr(
+                            "transform",
+                            `translate(
+                                ${width / 2},
+                                ${height / 2}
+                            )`
+                        );
+
+
+                const color =
+                    d3.scaleOrdinal(
+                        d3.schemeCategory10
+                    );
+
+
+                const pie =
+                    d3.pie()
+                        .value(
+                            d => d.totalPosts
+                        );
+
+
+                const arc =
+                    d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(
+                            radius - 20
+                        );
+
+
+                const arcs =
+                    svg.selectAll(".arc")
+                        .data(
+                            pie(data)
+                        )
+                        .enter()
+                        .append("g")
+                        .attr(
+                            "class",
+                            "arc"
+                        );
+
+
+                arcs.append("path")
+                    .attr(
+                        "d",
+                        arc
+                    )
+                    .attr(
+                        "fill",
+                        d =>
+                            color(
+                                d.data._id
+                            )
+                    );
+
+
+                arcs.append("text")
+                    .attr(
+                        "transform",
+                        d =>
+                            `translate(
+                                ${arc.centroid(d)}
+                            )`
+                    )
+                    .attr(
+                        "text-anchor",
+                        "middle"
+                    )
+                    .text(
+                        d =>
+                            `חודש ${d.data._id}`
+                    );
+
+            })
+            .catch(error => {
+
+                console.error(
+                    'Error loading monthly analytics:',
+                    error
+                );
+
+            });
+
     </script>
+
 </body>
+
 </html>

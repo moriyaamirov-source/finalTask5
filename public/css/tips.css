@@ -96,3 +96,69 @@
 .btn-back:hover {
     background-color: var(--primary-hover);
 }
+.tips-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.tips-header {
+    background-color: var(--card-bg);
+    padding: 35px 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tips-header h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tips-header p {
+    color: #666666;
+    font-size: 17px;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.tips-grid > * {
+    background-color: var(--card-bg);
+    padding: 25px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tips-grid > *:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tips-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-back {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-back:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}

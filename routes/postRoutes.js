@@ -1,23 +1,32 @@
 const express = require('express');
+
 const router = express.Router();
 
 const postController = require('../controllers/postController');
 const { requireAuth } = require('../middleware/authMiddleware');
 
 
+// ==============================
 // SEARCHES
+// ==============================
+
+// חיפוש מתקדם - דרישה 23
 router.get(
     '/search/advanced',
     postController.advancedSearchPosts
 );
 
+// חיפוש נוסף - דרישה 23
 router.get(
     '/search/filter',
     postController.filterPosts
 );
 
 
+// ==============================
 // GROUP BY
+// ==============================
+
 router.get(
     '/stats/type',
     postController.getPostsStatsByType
@@ -29,7 +38,19 @@ router.get(
 );
 
 
+// ==============================
+// X / Twitter API
+// ==============================
+
+router.post(
+    '/share-x',
+    postController.shareToX
+);
+
+
+// ==============================
 // CRUD
+// ==============================
 
 // CREATE - רק משתמש מחובר
 router.post(
@@ -38,12 +59,13 @@ router.post(
     postController.createPost
 );
 
-// READ - אפשר לקרוא בלי Login
+// READ ALL
 router.get(
     '/',
     postController.getPosts
 );
 
+// READ BY ID
 router.get(
     '/:id',
     postController.getPostById

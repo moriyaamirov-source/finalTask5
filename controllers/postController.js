@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const mongoose = require('mongoose');
+const { TwitterApi } = require('twitter-api-v2');
 
 const VALID_REGIONS = ['צפון', 'מרכז', 'דרום'];
 const VALID_DIFFICULTIES = ['קל', 'בינוני', 'קשה'];
@@ -158,7 +159,6 @@ exports.createPost = async (req, res) => {
             location
         } = req.body;
 
-
         if (
             !title ||
             !String(title).trim() ||
@@ -166,49 +166,35 @@ exports.createPost = async (req, res) => {
             !String(content).trim()
         ) {
             return res.status(400).json({
-                message:
-                    'Title and content are required'
+                message: 'Title and content are required'
             });
         }
 
-
         const normalizedLocation =
             normalizeLocation(location);
-
 
         const tripValidationError =
             validateTripFields({
                 region,
                 duration,
                 difficulty,
-                location:
-                    normalizedLocation
+                location: normalizedLocation
             });
-
 
         if (tripValidationError) {
             return res.status(400).json({
-                message:
-                    tripValidationError
+                message: tripValidationError
             });
         }
 
-
         const newPost = new Post({
-            title:
-                String(title).trim(),
-
-            content:
-                String(content).trim(),
-
-            postType:
-                postType || 'text',
-
+            title: String(title).trim(),
+            content: String(content).trim(),
+            postType: postType || 'text',
             mediaUrl,
 
-            // היוצר מגיע רק מה-session
-            author:
-                req.session.userId,
+            // היוצר נלקח מה-session
+            author: req.session.userId,
 
             region,
 
@@ -219,18 +205,13 @@ exports.createPost = async (req, res) => {
 
             difficulty,
 
-            location:
-                normalizedLocation
+            location: normalizedLocation
         });
-
 
         const savedPost =
             await newPost.save();
 
-
-        res.status(201).json(
-            savedPost
-        );
+        res.status(201).json(savedPost);
 
     } catch (err) {
         console.error(
@@ -261,10 +242,7 @@ exports.getPosts = async (req, res) => {
                     createdAt: -1
                 });
 
-
-        res.status(200).json(
-            posts
-        );
+        res.status(200).json(posts);
 
     } catch (err) {
         res.status(500).json({
@@ -278,21 +256,16 @@ exports.getPosts = async (req, res) => {
 // READ BY ID
 // ========================================
 
-exports.getPostById =
-async (req, res) => {
+exports.getPostById = async (req, res) => {
     try {
         if (
             !mongoose.Types.ObjectId
                 .isValid(req.params.id)
         ) {
-            return res
-                .status(400)
-                .json({
-                    message:
-                        'Invalid post ID'
-                });
+            return res.status(400).json({
+                message: 'Invalid post ID'
+            });
         }
-
 
         const post =
             await Post
@@ -302,20 +275,13 @@ async (req, res) => {
                     'username'
                 );
 
-
         if (!post) {
-            return res
-                .status(404)
-                .json({
-                    message:
-                        'Post not found'
-                });
+            return res.status(404).json({
+                message: 'Post not found'
+            });
         }
 
-
-        res.status(200).json(
-            post
-        );
+        res.status(200).json(post);
 
     } catch (err) {
         res.status(500).json({
@@ -330,8 +296,7 @@ async (req, res) => {
 // keyword + postType + startDate
 // ========================================
 
-exports.advancedSearchPosts =
-async (req, res) => {
+exports.advancedSearchPosts = async (req, res) => {
     try {
         const {
             keyword,
@@ -339,9 +304,7 @@ async (req, res) => {
             startDate
         } = req.query;
 
-
         const query = {};
-
 
         if (keyword) {
             query.$or = [
@@ -360,37 +323,29 @@ async (req, res) => {
             ];
         }
 
-
         if (postType) {
             query.postType =
                 postType;
         }
 
-
         if (startDate) {
             const parsedDate =
                 new Date(startDate);
-
 
             if (
                 Number.isNaN(
                     parsedDate.getTime()
                 )
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        message:
-                            'Invalid startDate'
-                    });
+                return res.status(400).json({
+                    message: 'Invalid startDate'
+                });
             }
-
 
             query.createdAt = {
                 $gte: parsedDate
             };
         }
-
 
         const posts =
             await Post.find(query)
@@ -402,10 +357,7 @@ async (req, res) => {
                     createdAt: -1
                 });
 
-
-        res.status(200).json(
-            posts
-        );
+        res.status(200).json(posts);
 
     } catch (err) {
         res.status(500).json({
@@ -420,8 +372,7 @@ async (req, res) => {
 // title + endDate + hasMedia
 // ========================================
 
-exports.filterPosts =
-async (req, res) => {
+exports.filterPosts = async (req, res) => {
     try {
         const {
             title,
@@ -429,9 +380,7 @@ async (req, res) => {
             hasMedia
         } = req.query;
 
-
         const query = {};
-
 
         if (title) {
             query.title = {
@@ -440,31 +389,24 @@ async (req, res) => {
             };
         }
 
-
         if (endDate) {
             const parsedDate =
                 new Date(endDate);
-
 
             if (
                 Number.isNaN(
                     parsedDate.getTime()
                 )
             ) {
-                return res
-                    .status(400)
-                    .json({
-                        message:
-                            'Invalid endDate'
-                    });
+                return res.status(400).json({
+                    message: 'Invalid endDate'
+                });
             }
-
 
             query.createdAt = {
                 $lte: parsedDate
             };
         }
-
 
         if (hasMedia === 'true') {
             query.mediaUrl = {
@@ -475,7 +417,6 @@ async (req, res) => {
                 ]
             };
         }
-
 
         if (hasMedia === 'false') {
             query.$or = [
@@ -493,7 +434,6 @@ async (req, res) => {
             ];
         }
 
-
         const posts =
             await Post.find(query)
                 .populate(
@@ -504,10 +444,7 @@ async (req, res) => {
                     createdAt: -1
                 });
 
-
-        res.status(200).json(
-            posts
-        );
+        res.status(200).json(posts);
 
     } catch (err) {
         res.status(500).json({
@@ -522,15 +459,13 @@ async (req, res) => {
 // קיבוץ לפי סוג פוסט
 // ========================================
 
-exports.getPostsStatsByType =
-async (req, res) => {
+exports.getPostsStatsByType = async (req, res) => {
     try {
         const stats =
             await Post.aggregate([
                 {
                     $group: {
-                        _id:
-                            '$postType',
+                        _id: '$postType',
 
                         count: {
                             $sum: 1
@@ -538,8 +473,7 @@ async (req, res) => {
 
                         averageTitleLength: {
                             $avg: {
-                                $strLenCP:
-                                    '$title'
+                                $strLenCP: '$title'
                             }
                         }
                     }
@@ -552,10 +486,7 @@ async (req, res) => {
                 }
             ]);
 
-
-        res.status(200).json(
-            stats
-        );
+        res.status(200).json(stats);
 
     } catch (err) {
         res.status(500).json({
@@ -570,8 +501,7 @@ async (req, res) => {
 // קיבוץ לפי תאריך
 // ========================================
 
-exports.getPostsStatsByDate =
-async (req, res) => {
+exports.getPostsStatsByDate = async (req, res) => {
     try {
         const stats =
             await Post.aggregate([
@@ -579,18 +509,15 @@ async (req, res) => {
                     $group: {
                         _id: {
                             year: {
-                                $year:
-                                    '$createdAt'
+                                $year: '$createdAt'
                             },
 
                             month: {
-                                $month:
-                                    '$createdAt'
+                                $month: '$createdAt'
                             },
 
                             day: {
-                                $dayOfMonth:
-                                    '$createdAt'
+                                $dayOfMonth: '$createdAt'
                             }
                         },
 
@@ -609,10 +536,7 @@ async (req, res) => {
                 }
             ]);
 
-
-        res.status(200).json(
-            stats
-        );
+        res.status(200).json(stats);
 
     } catch (err) {
         res.status(500).json({
@@ -626,67 +550,48 @@ async (req, res) => {
 // UPDATE
 // ========================================
 
-exports.updatePost =
-async (req, res) => {
+exports.updatePost = async (req, res) => {
     try {
         if (
             !req.session ||
             !req.session.userId
         ) {
-            return res
-                .status(401)
-                .json({
-                    message:
-                        'Authentication required'
-                });
+            return res.status(401).json({
+                message: 'Authentication required'
+            });
         }
-
 
         if (
             !mongoose.Types.ObjectId
                 .isValid(req.params.id)
         ) {
-            return res
-                .status(400)
-                .json({
-                    message:
-                        'Invalid post ID'
-                });
+            return res.status(400).json({
+                message: 'Invalid post ID'
+            });
         }
-
 
         const post =
             await Post.findById(
                 req.params.id
             );
 
-
         if (!post) {
-            return res
-                .status(404)
-                .json({
-                    message:
-                        'Post not found'
-                });
+            return res.status(404).json({
+                message: 'Post not found'
+            });
         }
-
 
         // הרשאה - רק בעל הפוסט
         if (
             !post.author ||
             post.author.toString() !==
-                String(
-                    req.session.userId
-                )
+                String(req.session.userId)
         ) {
-            return res
-                .status(403)
-                .json({
-                    message:
-                        'Permission denied: You can only edit your own posts'
-                });
+            return res.status(403).json({
+                message:
+                    'Permission denied: You can only edit your own posts'
+            });
         }
-
 
         const {
             title,
@@ -699,90 +604,59 @@ async (req, res) => {
             location
         } = req.body;
 
-
         if (title !== undefined) {
-            if (
-                !String(title).trim()
-            ) {
-                return res
-                    .status(400)
-                    .json({
-                        message:
-                            'Title cannot be empty'
-                    });
+            if (!String(title).trim()) {
+                return res.status(400).json({
+                    message: 'Title cannot be empty'
+                });
             }
 
             post.title =
                 String(title).trim();
         }
 
-
         if (content !== undefined) {
-            if (
-                !String(content).trim()
-            ) {
-                return res
-                    .status(400)
-                    .json({
-                        message:
-                            'Content cannot be empty'
-                    });
+            if (!String(content).trim()) {
+                return res.status(400).json({
+                    message: 'Content cannot be empty'
+                });
             }
 
             post.content =
                 String(content).trim();
         }
 
-
-        if (
-            postType !== undefined
-        ) {
+        if (postType !== undefined) {
             post.postType =
                 postType;
         }
 
-
-        if (
-            mediaUrl !== undefined
-        ) {
+        if (mediaUrl !== undefined) {
             post.mediaUrl =
                 mediaUrl;
         }
 
-
-        if (
-            region !== undefined
-        ) {
+        if (region !== undefined) {
             post.region =
                 region;
         }
 
-
-        if (
-            duration !== undefined
-        ) {
+        if (duration !== undefined) {
             post.duration =
                 Number(duration);
         }
 
-
-        if (
-            difficulty !== undefined
-        ) {
+        if (difficulty !== undefined) {
             post.difficulty =
                 difficulty;
         }
 
-
-        if (
-            location !== undefined
-        ) {
+        if (location !== undefined) {
             post.location =
                 normalizeLocation(
                     location
                 );
         }
-
 
         const currentLocation =
             post.location
@@ -798,36 +672,22 @@ async (req, res) => {
                 }
                 : undefined;
 
-
         const tripValidationError =
             validateTripFields({
-                region:
-                    post.region,
-
-                duration:
-                    post.duration,
-
-                difficulty:
-                    post.difficulty,
-
-                location:
-                    currentLocation
+                region: post.region,
+                duration: post.duration,
+                difficulty: post.difficulty,
+                location: currentLocation
             });
 
-
         if (tripValidationError) {
-            return res
-                .status(400)
-                .json({
-                    message:
-                        tripValidationError
-                });
+            return res.status(400).json({
+                message: tripValidationError
+            });
         }
-
 
         const updatedPost =
             await post.save();
-
 
         res.status(200).json(
             updatedPost
@@ -845,71 +705,52 @@ async (req, res) => {
 // DELETE
 // ========================================
 
-exports.deletePost =
-async (req, res) => {
+exports.deletePost = async (req, res) => {
     try {
         if (
             !req.session ||
             !req.session.userId
         ) {
-            return res
-                .status(401)
-                .json({
-                    message:
-                        'Authentication required'
-                });
+            return res.status(401).json({
+                message: 'Authentication required'
+            });
         }
-
 
         if (
             !mongoose.Types.ObjectId
                 .isValid(req.params.id)
         ) {
-            return res
-                .status(400)
-                .json({
-                    message:
-                        'Invalid post ID'
-                });
+            return res.status(400).json({
+                message: 'Invalid post ID'
+            });
         }
-
 
         const post =
             await Post.findById(
                 req.params.id
             );
 
-
         if (!post) {
-            return res
-                .status(404)
-                .json({
-                    message:
-                        'Post not found'
-                });
+            return res.status(404).json({
+                message: 'Post not found'
+            });
         }
 
-
+        // הרשאה - רק בעל הפוסט
         if (
             !post.author ||
             post.author.toString() !==
-                String(
-                    req.session.userId
-                )
+                String(req.session.userId)
         ) {
-            return res
-                .status(403)
-                .json({
-                    message:
-                        'Permission denied: You can only delete your own posts'
-                });
+            return res.status(403).json({
+                message:
+                    'Permission denied: You can only delete your own posts'
+            });
         }
-
 
         await Post.findByIdAndDelete(
             req.params.id
         );
-
 
         res.status(200).json({
             message:
@@ -919,6 +760,99 @@ async (req, res) => {
     } catch (err) {
         res.status(500).json({
             message: err.message
+        });
+    }
+};
+
+
+// ========================================
+// X / TWITTER API - העבודה של נטע
+// ========================================
+
+exports.shareToX = async (req, res) => {
+    try {
+        const {
+            X_API_KEY,
+            X_API_SECRET,
+            X_ACCESS_TOKEN,
+            X_ACCESS_TOKEN_SECRET
+        } = process.env;
+
+        if (
+            !X_API_KEY ||
+            !X_API_SECRET ||
+            !X_ACCESS_TOKEN ||
+            !X_ACCESS_TOKEN_SECRET
+        ) {
+            return res.status(500).json({
+                success: false,
+                message:
+                    'חסרים פרטי התחברות ל-X בשרת'
+            });
+        }
+
+        const { text } = req.body;
+
+        if (
+            !text ||
+            !text.trim()
+        ) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    'יש להזין טקסט לפרסום'
+            });
+        }
+
+        const client = new TwitterApi({
+            appKey: X_API_KEY,
+            appSecret: X_API_SECRET,
+            accessToken: X_ACCESS_TOKEN,
+            accessSecret:
+                X_ACCESS_TOKEN_SECRET
+        });
+
+        const currentUser =
+            await client.currentUserV2();
+
+        console.log(
+            'Connected X account:',
+            currentUser.data
+        );
+
+        const result =
+            await client.v2.tweet(
+                text.trim()
+            );
+
+        console.log(
+            'X API response:',
+            result
+        );
+
+        console.log(
+            'Published X post ID:',
+            result.data.id
+        );
+
+        res.status(200).json({
+            success: true,
+            message:
+                'הפוסט פורסם בהצלחה ב-X',
+            postId:
+                result.data.id
+        });
+
+    } catch (error) {
+        console.error(
+            'X API error:',
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message:
+                'שגיאה בפרסום ל-X'
         });
     }
 };

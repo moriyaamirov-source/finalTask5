@@ -1,48 +1,96 @@
 const Post = require('../models/Post');
 
-// שליפת התפלגות פוסטים לפי אזור בארץ עבור גרף עמודות D3
+
+// ========================================
+// גרף 1 - כמות מסלולים לפי אזור
+// הנתונים מגיעים ישירות מ-MongoDB
+// ========================================
+
 exports.getCategoryStats = async (req, res) => {
     try {
-        let stats = await Post.aggregate([
-            { $group: { _id: "$category", count: { $sum: 1 } } },
-            { $project: { category: "$_id", count: 1, _id: 0 } }
+        const stats = await Post.aggregate([
+            {
+                // רק Posts שהם מסלולים ויש להם אזור תקין
+                $match: {
+                    region: {
+                        $in: ['צפון', 'מרכז', 'דרום']
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: '$region',
+                    count: {
+                        $sum: 1
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    category: '$_id',
+                    count: 1
+                }
+            },
+            {
+                $sort: {
+                    category: 1
+                }
+            }
         ]);
 
-        // אם בסיס הנתונים עדיין ריק - מחזירים ברירת מחדל לפי האזורים המדויקים באתר (צפון, מרכז, דרום)
-        if (!stats || stats.length === 0) {
-            stats = [
-                { category: 'צפון', count: 14 },
-                { category: 'מרכז', count: 13 },
-                { category: 'דרום', count: 13 }
-            ];
-        }
+        res.status(200).json(stats);
 
-        res.json(stats);
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
+        console.error(
+            'Analytics category error:',
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: 'Server Error'
+        });
     }
 };
 
-// שליפת נתונים חודשיים עבור גרף עוגה D3
+
+// ========================================
+// גרף 2 - כמות Posts לפי חודש
+// הנתונים מגיעים ישירות מ-MongoDB
+// ========================================
+
 exports.getMonthlyStats = async (req, res) => {
     try {
-        let stats = await Post.aggregate([
-            { $group: { _id: { $month: "$createdAt" }, totalPosts: { $sum: 1 } } },
-            { $sort: { "_id": 1 } }
+        const stats = await Post.aggregate([
+            {
+                $group: {
+                    _id: {
+                        $month: '$createdAt'
+                    },
+                    totalPosts: {
+                        $sum: 1
+                    }
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            }
         ]);
 
-        // אם בסיס הנתונים עדיין ריק - מחזירים נתונים חודשיים זמניים
-        if (!stats || stats.length === 0) {
-            stats = [
-                { _id: 5, totalPosts: 8 },
-                { _id: 6, totalPosts: 12 },
-                { _id: 7, totalPosts: 15 },
-                { _id: 8, totalPosts: 5 }
-            ];
-        }
+        res.status(200).json(stats);
 
-        res.json(stats);
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error' });
+        console.error(
+            'Analytics monthly error:',
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: 'Server Error'
+        });
     }
 };

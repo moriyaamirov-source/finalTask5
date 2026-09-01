@@ -44,6 +44,7 @@ router.get(
 
 router.post(
     '/share-x',
+    requireAuth,
     postController.shareToX
 );
 

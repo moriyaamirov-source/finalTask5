@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (res.body.userId) localStorage.setItem('userId', res.body.userId);
                     localStorage.setItem('loggedInUser', fullNameInput.value.trim());
                     alert('ההרשמה הושלמה בהצלחה!');
-                    window.location.href = 'homePage.html';
+                    window.location.href = '/login.html';
                 } else {
                     alert('שגיאה בהרשמה: ' + (res.body.message || 'נתונים לא תקינים'));
                 }

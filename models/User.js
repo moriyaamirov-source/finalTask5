@@ -1,9 +1,28 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // בהמשך אפשר להוסיף הצפנה (bcrypt) אם תרצו
-    createdAt: { type: Date, default: Date.now }
+
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
+    password: {
+        type: String,
+        required: true
+    },
+
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+
 });
 
 module.exports = mongoose.model('User', userSchema);

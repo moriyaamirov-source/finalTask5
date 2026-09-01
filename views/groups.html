@@ -22,7 +22,7 @@
     >
 
     <script
-        src="/js/groups.js"
+        src="/js/groups.js?v=3"
         defer>
     </script>
 </head>
@@ -37,14 +37,14 @@
             </div>
 
             <div class="nav-links">
-    <a href="homePage.html">בית</a>
-    <a href="trips.html">טיולים</a>
-    <a href="groups.html">קבוצות</a>
-    <a href="tips.html">טיפים</a>
-    <a href="analytics.html">סטטיסטיקות</a>
-    <a href="login.html">התחברות</a>
-    <a href="register.html">הרשמה</a>
-</div>
+                <a href="homePage.html">בית</a>
+                <a href="trips.html">טיולים</a>
+                <a href="groups.html">קבוצות</a>
+                <a href="tips.html">טיפים</a>
+                <a href="analytics.html">סטטיסטיקות</a>
+                <a href="login.html">התחברות</a>
+                <a href="register.html">הרשמה</a>
+            </div>
 
         </nav>
     </header>
@@ -52,6 +52,7 @@
 
     <main class="groups-page">
 
+        <!-- כותרת -->
         <section class="groups-header">
 
             <h1>
@@ -66,7 +67,10 @@
         </section>
 
 
+        <!-- ========================= -->
         <!-- יצירת קבוצה -->
+        <!-- ========================= -->
+
         <section class="group-form-card">
 
             <h2>
@@ -78,6 +82,7 @@
                 <div class="group-form-grid">
 
                     <div class="form-field">
+
                         <label for="groupName">
                             שם הקבוצה
                         </label>
@@ -89,6 +94,7 @@
                             required
                             placeholder="לדוגמה: מטיילים בצפון"
                         >
+
                     </div>
 
 
@@ -102,6 +108,7 @@
                             id="groupRegion"
                             required
                         >
+
                             <option value="">
                                 בחרו אזור
                             </option>
@@ -117,6 +124,7 @@
                             <option value="דרום">
                                 דרום
                             </option>
+
                         </select>
 
                     </div>
@@ -147,6 +155,7 @@
                     צור קבוצה
                 </button>
 
+
                 <p
                     id="groupFormMessage"
                     class="groups-message"
@@ -157,7 +166,10 @@
         </section>
 
 
+        <!-- ========================= -->
         <!-- עריכת קבוצה -->
+        <!-- ========================= -->
+
         <section
             id="editGroupSection"
             class="group-form-card hidden"
@@ -203,6 +215,7 @@
                             id="editGroupRegion"
                             required
                         >
+
                             <option value="צפון">
                                 צפון
                             </option>
@@ -214,6 +227,7 @@
                             <option value="דרום">
                                 דרום
                             </option>
+
                         </select>
 
                     </div>
@@ -255,6 +269,7 @@
 
                 </div>
 
+
                 <p
                     id="editGroupMessage"
                     class="groups-message"
@@ -265,7 +280,10 @@
         </section>
 
 
+        <!-- ========================= -->
         <!-- רשימת קבוצות -->
+        <!-- ========================= -->
+
         <section class="groups-list-section">
 
             <div class="groups-list-title">
@@ -300,13 +318,132 @@
 
         </section>
 
+
+        <!-- ========================= -->
+        <!-- פוסטים של קבוצה -->
+        <!-- ========================= -->
+
+        <section
+            id="groupPostsSection"
+            class="group-form-card hidden"
+        >
+
+            <div class="group-posts-header">
+
+                <div>
+
+                    <h2 id="groupPostsTitle">
+                        פוסטים בקבוצה
+                    </h2>
+
+                    <p>
+                        כאן אפשר לראות ולפרסם פוסטים בקבוצה.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeGroupPostsBtn"
+                    class="btn-secondary"
+                >
+                    סגירה
+                </button>
+
+            </div>
+
+
+            <!-- יצירת פוסט בקבוצה -->
+
+            <form id="groupPostForm">
+
+                <div class="group-form-grid">
+
+                    <div class="form-field full-width">
+
+                        <label for="groupPostTitle">
+                            כותרת
+                        </label>
+
+                        <input
+                            type="text"
+                            id="groupPostTitle"
+                            maxlength="120"
+                            required
+                            placeholder="כותרת הפוסט"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field full-width">
+
+                        <label for="groupPostContent">
+                            תוכן
+                        </label>
+
+                        <textarea
+                            id="groupPostContent"
+                            rows="4"
+                            maxlength="1000"
+                            required
+                            placeholder="מה תרצו לשתף עם הקבוצה?"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    פרסום בקבוצה
+                </button>
+
+
+                <p
+                    id="groupPostMessage"
+                    class="groups-message"
+                ></p>
+
+            </form>
+
+
+            <!-- רשימת פוסטים -->
+
+            <div class="group-posts-list">
+
+                <h3>
+                    פוסטים אחרונים
+                </h3>
+
+                <p
+                    id="groupPostsStatus"
+                    class="groups-status"
+                ></p>
+
+
+                <div
+                    id="groupPostsContainer"
+                    class="group-posts-container"
+                ></div>
+
+            </div>
+
+        </section>
+
     </main>
 
 
     <footer class="footer">
+
         <p>
             &copy; Israeli Trips - כל הזכויות שמורות
         </p>
+
     </footer>
 
 </body>

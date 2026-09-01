@@ -86,7 +86,7 @@ app.get('/api/maps-key', (req, res) => {
 
 
 // ==============================
-// Routes
+// API Routes
 // ==============================
 
 const authRoutes = require('./routes/authRoutes');
@@ -103,11 +103,57 @@ app.use('/api', apiRoutes);
 
 
 // ==============================
-// Static Files
+// Public Static Files
+// CSS / JS / Images
 // ==============================
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'views')));
+app.use(
+    express.static(
+        path.join(__dirname, 'public')
+    )
+);
+
+
+// ==============================
+// Page Authentication
+// ==============================
+
+const publicPages = [
+    '/login.html',
+    '/register.html'
+];
+
+app.use((req, res, next) => {
+
+    // Login + Register פתוחים לכולם
+    if (publicPages.includes(req.path)) {
+        return next();
+    }
+
+    // כל HTML אחר דורש התחברות
+    if (
+        req.path.endsWith('.html') &&
+        (
+            !req.session ||
+            !req.session.userId
+        )
+    ) {
+        return res.redirect('/login.html');
+    }
+
+    next();
+});
+
+
+// ==============================
+// Views
+// ==============================
+
+app.use(
+    express.static(
+        path.join(__dirname, 'views')
+    )
+);
 
 
 // ==============================
@@ -115,7 +161,15 @@ app.use(express.static(path.join(__dirname, 'views')));
 // ==============================
 
 app.get('/', (req, res) => {
-    res.redirect('/trips.html');
+
+    if (
+        req.session &&
+        req.session.userId
+    ) {
+        return res.redirect('/homePage.html');
+    }
+
+    res.redirect('/login.html');
 });
 
 
@@ -126,7 +180,14 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
+
     console.log(`Server file: ${__filename}`);
-    console.log(`Server is running at http://localhost:${PORT}/trips.html`);
-    console.log(`Maps test: http://localhost:${PORT}/api/maps-key`);
+
+    console.log(
+        `Server is running at http://localhost:${PORT}`
+    );
+
+    console.log(
+        `Maps test: http://localhost:${PORT}/api/maps-key`
+    );
 });

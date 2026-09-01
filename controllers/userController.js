@@ -109,8 +109,7 @@ exports.updateUser = async (req, res) => {
             });
         }
 
-        // משתמש יכול לעדכן רק את עצמו
-        if (req.session.userId !== req.params.id) {
+        if (String(req.session.userId) !== String(req.params.id)) {
             return res.status(403).json({
                 message: 'Permission denied'
             });
@@ -150,7 +149,6 @@ exports.updateUser = async (req, res) => {
             });
         }
 
-        // מעדכנים גם את שם המשתמש ב-session
         req.session.username = updatedUser.username;
 
         res.status(200).json(updatedUser);
@@ -174,7 +172,7 @@ exports.deleteUser = async (req, res) => {
             });
         }
 
-        if (req.session.userId !== req.params.id) {
+        if (String(req.session.userId) !== String(req.params.id)) {
             return res.status(403).json({
                 message: 'Permission denied'
             });
@@ -188,6 +186,16 @@ exports.deleteUser = async (req, res) => {
             });
         }
 
+        // מסירים את המשתמש שנמחק מרשימות החברים של משתמשים אחרים
+        await User.updateMany(
+            {},
+            {
+                $pull: {
+                    friends: deletedUser._id
+                }
+            }
+        );
+
         req.session.destroy(() => {});
 
         res.status(200).json({
@@ -199,6 +207,177 @@ exports.deleteUser = async (req, res) => {
 
         res.status(500).json({
             message: 'Failed to delete user'
+        });
+    }
+};
+
+
+// GET MY FRIENDS
+exports.getMyFriends = async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId)
+            .populate('friends', 'username createdAt')
+            .select('-password');
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        res.status(200).json(user.friends);
+
+    } catch (err) {
+        console.error('Error fetching friends:', err);
+
+        res.status(500).json({
+            message: 'Failed to fetch friends'
+        });
+    }
+};
+
+
+// ADD FRIEND
+exports.addFriend = async (req, res) => {
+    try {
+        const currentUserId = req.session.userId;
+        const friendId = req.params.friendId;
+
+        if (!mongoose.Types.ObjectId.isValid(friendId)) {
+            return res.status(400).json({
+                message: 'Invalid friend ID'
+            });
+        }
+
+        if (String(currentUserId) === String(friendId)) {
+            return res.status(400).json({
+                message: 'You cannot add yourself as a friend'
+            });
+        }
+
+        const friend = await User.findById(friendId);
+
+        if (!friend) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const currentUser = await User.findById(currentUserId);
+
+        if (!currentUser) {
+            return res.status(404).json({
+                message: 'Current user not found'
+            });
+        }
+
+        const alreadyFriends = currentUser.friends.some(
+            id => String(id) === String(friendId)
+        );
+
+        if (alreadyFriends) {
+            return res.status(409).json({
+                message: 'User is already your friend'
+            });
+        }
+
+        // חברות הדדית
+        await User.findByIdAndUpdate(
+            currentUserId,
+            {
+                $addToSet: {
+                    friends: friendId
+                }
+            }
+        );
+
+        await User.findByIdAndUpdate(
+            friendId,
+            {
+                $addToSet: {
+                    friends: currentUserId
+                }
+            }
+        );
+
+        const updatedUser = await User.findById(currentUserId)
+            .populate('friends', 'username createdAt')
+            .select('-password');
+
+        res.status(200).json({
+            message: 'Friend added successfully',
+            friends: updatedUser.friends
+        });
+
+    } catch (err) {
+        console.error('Error adding friend:', err);
+
+        res.status(500).json({
+            message: 'Failed to add friend'
+        });
+    }
+};
+
+
+// REMOVE FRIEND
+exports.removeFriend = async (req, res) => {
+    try {
+        const currentUserId = req.session.userId;
+        const friendId = req.params.friendId;
+
+        if (!mongoose.Types.ObjectId.isValid(friendId)) {
+            return res.status(400).json({
+                message: 'Invalid friend ID'
+            });
+        }
+
+        if (String(currentUserId) === String(friendId)) {
+            return res.status(400).json({
+                message: 'Invalid friend ID'
+            });
+        }
+
+        const friend = await User.findById(friendId);
+
+        if (!friend) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        // הסרה משני הצדדים
+        await User.findByIdAndUpdate(
+            currentUserId,
+            {
+                $pull: {
+                    friends: friendId
+                }
+            }
+        );
+
+        await User.findByIdAndUpdate(
+            friendId,
+            {
+                $pull: {
+                    friends: currentUserId
+                }
+            }
+        );
+
+        const updatedUser = await User.findById(currentUserId)
+            .populate('friends', 'username createdAt')
+            .select('-password');
+
+        res.status(200).json({
+            message: 'Friend removed successfully',
+            friends: updatedUser.friends
+        });
+
+    } catch (err) {
+        console.error('Error removing friend:', err);
+
+        res.status(500).json({
+            message: 'Failed to remove friend'
         });
     }
 };
